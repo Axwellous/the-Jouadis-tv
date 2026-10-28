@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Jouadis TV</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#08111f;color:white;font-family:Arial,sans-serif;overflow-x:hidden}
+#background{position:fixed;inset:0;background-size:cover;background-position:center;transition:opacity .7s;z-index:-2}
+.shade{position:fixed;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.76),rgba(0,0,0,.12)),linear-gradient(0deg,#070a13 0%,transparent 75%);z-index:-1}
+main{min-height:100vh;padding:3vw 4vw;display:flex;flex-direction:column;justify-content:space-between;gap:25px}
+header,.top,.cities,.apps,nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:Georgia,serif;font-style:italic;font-size:clamp(25px,3.4vw,55px)}
+.subtitle{font-size:14px;color:#ddd;margin-top:8px}
+.clock{text-align:right;font-size:clamp(22px,3vw,48px)}
+#date{font-size:15px;color:#ddd}
+.weather h1{font-size:clamp(30px,5vw,70px);margin:8px 0}
+.weather .temp{font-size:clamp(60px,9vw,140px);font-weight:300}
+#condition{font-size:22px}
+.cities{justify-content:center;flex-wrap:wrap}
+.city{width:23%;min-width:130px;height:95px;background-size:cover;background-position:center;border:2px solid #ffffff55;border-radius:17px;color:white;font-weight:bold;font-size:18px;text-shadow:0 2px 8px black;cursor:pointer}
+.city.active,.app:focus,.city:focus,nav button:focus{outline:3px solid white;outline-offset:3px}
+.apps{flex-wrap:wrap}
+.app{flex:1;min-width:110px;min-height:80px;border:1px solid #ffffff55;border-radius:17px;background:#101827dd;color:white;font-weight:bold;font-size:clamp(15px,2vw,28px);cursor:pointer}
+.app:nth-child(1){color:#e50914}.app:nth-child(2){color:#ff5555}
+.app:nth-child(3){color:#55b8ff}.app:nth-child(6){color:#1ed760}
+nav{border-radius:25px;background:#101722dd;padding:12px;flex-wrap:wrap}
+nav button{background:transparent;color:white;border:0;padding:13px;cursor:pointer;font-size:15px}
+nav button:first-child{background:#ffffff30;border-radius:15px}
+#message{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#111d2b;padding:15px 25px;border-radius:15px;display:none;text-align:center}
+@media(max-width:700px){.city{width:45%}.top{align-items:flex-start}.apps{justify-content:center}nav{justify-content:center}}
+</style>
+</head>
+<body>
+<div id="background"></div><div class="shade"></div>
+<main>
+<header>
+<div><div class="brand">✦ The Jouadis TV</div><div class="subtitle">Your Family Entertainment</div></div>
+<div class="clock"><div id="time">--:--</div><div id="date"></div></div>
+</header>
+<section class="top">
+<div class="weather">
+<h1 id="cityName">Casablanca</h1>
+<div class="temp" id="temperature">--°C</div>
+<div id="condition">Loading weather...</div>
+<p id="highlow"></p>
+</div>
+</section>
+<section class="cities" id="cities"></section>
+<section class="apps" id="apps"></section>
+<nav id="navigation"></nav>
+</main>
+<div id="message" role="status"></div>
+<script>
+var cities=[
+{name:"Casablanca",lat:33.5731,lon:-7.5898,zone:"Africa/Casablanca",photo:"https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=1600"},
+{name:"Newcastle",lat:54.9783,lon:-1.6178,zone:"Europe/London",photo:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600"},
+{name:"London",lat:51.5074,lon:-0.1278,zone:"Europe/London",photo:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600"},
+{name:"Manchester",lat:53.4808,lon:-2.2426,zone:"Europe/London",photo:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1600"}
+];
+var current=0, timer, weatherCache={};
+var apps=["Netflix","YouTube","Prime Video","Apple TV","Disney+","Spotify","Shahid"];
+var sections=["⌂ Home","▣ Movies","▣ Series","◉ Live TV","♫ Music","☁ Weather","⚙ Settings"];
+var descriptions={0:"Clear",1:"Mainly clear",2:"Partly cloudy",3:"Cloudy",45:"Foggy",48:"Foggy",51:"Light drizzle",61:"Rain",63:"Rain",65:"Heavy rain",71:"Snow",80:"Rain showers",95:"Thunderstorms"};
+function showMessage(s){
+var el=document.getElementById("message");el.textContent=s;el.style.display="block";
+setTimeout(function(){el.style.display="none"},3500);
+}
+function clock(){
+var d=new Date();
+document.getElementById("time").textContent=d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:cities[current].zone});
+document.getElementById("date").textContent=d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",timeZone:cities[current].zone});
+}
+function render(){
+var c=cities[current];
+document.getElementById("cityName").textContent=c.name;
+document.getElementById("background").style.backgroundImage='url("'+c.photo+'")';
+document.getElementById("cities").innerHTML=cities.map(function(x,i){
+return '<button class="city '+(i===current?'active':'')+'" data-city="'+i+'" style="background-image:linear-gradient(0deg,#000b,transparent),url(\''+x.photo+'\')">'+x.name+'</button>';
+}).join("");
+document.querySelectorAll("[data-city]").forEach(function(b){b.onclick=function(){selectCity(Number(b.dataset.city));};});
+clock();getWeather();
+}
+function selectCity(i){
+current=(i+cities.length)%cities.length;render();
+clearInterval(timer);timer=setInterval(function(){current=(current+1)%cities.length;render()},12000);
+}
+async function getWeather(){
+var c=cities[current],key=c.name;
+if(weatherCache[key]&&Date.now()-weatherCache[key].at<600000){displayWeather(weatherCache[key].data);return;}
+document.getElementById("temperature").textContent="--°C";
+document.getElementById("condition").textContent="Loading weather...";
+document.getElementById("highlow").textContent="";
+try{
+var url="https://api.open-meteo.com/v1/forecast?latitude="+c.lat+"&longitude="+c.lon+"&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1";
+var response=await fetch(url);if(!response.ok)throw Error("Weather unavailable");
+var data=await response.json();
+weatherCache[key]={data:data,at:Date.now()};
+if(cities[current].name===key)displayWeather(data);
+}catch(e){if(cities[current].name===key)document.getElementById("condition").textContent="Weather temporarily unavailable";}
+}
+function displayWeather(d){
+document.getElementById("temperature").textContent=Math.round(d.current.temperature_2m)+"°C";
+document.getElementById("condition").textContent=descriptions[d.current.weather_code]||"Current conditions";
+document.getElementById("highlow").textContent="H: "+Math.round(d.daily.temperature_2m_max[0])+"°  L: "+Math.round(d.daily.temperature_2m_min[0])+"°";
+}
+document.getElementById("apps").innerHTML=apps.map(function(a){return '<button class="app" data-app="'+a+'">'+a+"</button>";}).join("");
+document.querySelectorAll("[data-app]").forEach(function(b){b.onclick=function(){showMessage(b.dataset.app+" — shortcut demonstration");};});
+document.getElementById("navigation").innerHTML=sections.map(function(s){return "<button>"+s+"</button>";}).join("");
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){showMessage(b.textContent+" — coming soon");};});
+document.addEventListener("keydown",function(e){
+if(e.key==="ArrowRight"||e.key==="ArrowLeft"){
+var focusable=Array.from(document.querySelectorAll("button"));
+var i=focusable.indexOf(document.activeElement);
+if(i>=0){e.preventDefault();focusable[(i+(e.key==="ArrowRight"?1:-1)+focusable.length)%focusable.length].focus();}
+}
+if(e.key==="Enter"&&document.activeElement.tagName==="BUTTON")document.activeElement.click();
+});
+render();setInterval(clock,30000);
+timer=setInterval(function(){current=(current+1)%cities.length;render()},12000);
+</script>
+</body>
+</html>
