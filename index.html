@@ -4,122 +4,498 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Jouadis TV</title>
+<title>The Jouadis TV — V5</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#08111f;color:white;font-family:Arial,sans-serif;overflow-x:hidden}
-#background{position:fixed;inset:0;background-size:cover;background-position:center;transition:opacity .7s;z-index:-2}
-.shade{position:fixed;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.76),rgba(0,0,0,.12)),linear-gradient(0deg,#070a13 0%,transparent 75%);z-index:-1}
-main{min-height:100vh;padding:3vw 4vw;display:flex;flex-direction:column;justify-content:space-between;gap:25px}
-header,.top,.cities,.apps,nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{font-family:Georgia,serif;font-style:italic;font-size:clamp(25px,3.4vw,55px)}
-.subtitle{font-size:14px;color:#ddd;margin-top:8px}
-.clock{text-align:right;font-size:clamp(22px,3vw,48px)}
-#date{font-size:15px;color:#ddd}
-.weather h1{font-size:clamp(30px,5vw,70px);margin:8px 0}
-.weather .temp{font-size:clamp(60px,9vw,140px);font-weight:300}
+html,body{margin:0;width:100%;min-height:100%;background:#07101d;color:white;font-family:Arial,sans-serif}
+body{overflow-x:hidden}
+button{font:inherit;cursor:pointer;color:inherit}
+#bg,#shade{position:fixed;inset:0;pointer-events:none}
+#bg{background-size:cover;background-position:center;z-index:0;transition:opacity .7s,transform 12s linear;transform:scale(1.02)}
+#shade{z-index:1;background:linear-gradient(90deg,#020711dd,#02071130),linear-gradient(0deg,#020711ed,transparent 75%)}
+main{position:relative;z-index:2;min-height:100vh;min-height:100dvh;padding:2.5vw 4vw;display:flex;flex-direction:column;justify-content:space-between;gap:15px}
+header,.topbar{display:flex;justify-content:space-between;align-items:flex-start}
+.brand{font:italic clamp(27px,3.5vw,54px) Georgia,serif}
+.subtitle{font-size:13px;color:#ddd;margin-top:8px}
+.clock{text-align:right;font-size:clamp(24px,3vw,45px)}
+#date{font-size:14px;color:#ddd;margin-top:6px}
+.weather h1{font-size:clamp(36px,5vw,75px);font-weight:400;margin:0}
+.temp{font-size:clamp(65px,9vw,125px);font-weight:200}
 #condition{font-size:22px}
-.cities{justify-content:center;flex-wrap:wrap}
-.city{width:23%;min-width:130px;height:95px;background-size:cover;background-position:center;border:2px solid #ffffff55;border-radius:17px;color:white;font-weight:bold;font-size:18px;text-shadow:0 2px 8px black;cursor:pointer}
-.city.active,.app:focus,.city:focus,nav button:focus{outline:3px solid white;outline-offset:3px}
-.apps{flex-wrap:wrap}
-.app{flex:1;min-width:110px;min-height:80px;border:1px solid #ffffff55;border-radius:17px;background:#101827dd;color:white;font-weight:bold;font-size:clamp(15px,2vw,28px);cursor:pointer}
-.app:nth-child(1){color:#e50914}.app:nth-child(2){color:#ff5555}
-.app:nth-child(3){color:#55b8ff}.app:nth-child(6){color:#1ed760}
-nav{border-radius:25px;background:#101722dd;padding:12px;flex-wrap:wrap}
-nav button{background:transparent;color:white;border:0;padding:13px;cursor:pointer;font-size:15px}
-nav button:first-child{background:#ffffff30;border-radius:15px}
-#message{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#111d2b;padding:15px 25px;border-radius:15px;display:none;text-align:center}
-@media(max-width:700px){.city{width:45%}.top{align-items:flex-start}.apps{justify-content:center}nav{justify-content:center}}
+#highlow{color:#ddd}
+#landmark{color:#ddd;font-size:14px;margin-top:10px}
+.cities{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.city{height:clamp(65px,9vw,115px);border-radius:16px;border:1px solid #ffffff65;background-size:cover;background-position:center;text-shadow:0 2px 8px black;font-weight:bold}
+.city.active{border:2px solid white;box-shadow:0 0 15px #ffffff55}
+.dock{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;background:#101a2ab8;border:1px solid #ffffff30;padding:14px;border-radius:26px;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px)}
+.app{height:clamp(65px,8vw,105px);border:1px solid #ffffff25;border-radius:18px;background:#101625cc;display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.app img{width:64%;height:64%;object-fit:contain}
+.app:hover,.app:focus{transform:scale(1.09);background:#26364d}
+.app .fallback{display:none;font-weight:bold;font-size:24px}
+nav{display:flex;justify-content:space-around;gap:5px;background:#111b2acc;border-radius:22px;padding:9px}
+nav button{background:transparent;border:0;border-radius:12px;padding:12px}
+nav button.active{background:#ffffff30}
+button:focus{outline:3px solid white;outline-offset:3px}
+.panel{position:fixed;z-index:10;top:5%;right:4%;width:min(420px,92vw);max-height:90vh;overflow:auto;background:#101b2bf2;border:1px solid #ffffff45;border-radius:24px;padding:25px;box-shadow:0 15px 60px #0009;display:none;backdrop-filter:blur(20px)}
+.panel.open{display:block}
+.panel h2{margin-top:0;font-weight:400}
+.panel button,.panel select{background:#ffffff18;border:1px solid #ffffff40;color:white;border-radius:12px;padding:12px;margin:5px}
+.panel select option{color:black}
+.panel label{display:block;margin:15px 0}
+.forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.day{background:#ffffff13;border-radius:12px;padding:10px 4px;text-align:center;font-size:12px}
+.day strong{display:block;font-size:18px;margin:10px 0}
+.close{float:right}
+#toast{position:fixed;z-index:20;bottom:110px;left:50%;transform:translateX(-50%);background:#142338;border:1px solid #ffffff50;padding:14px 25px;border-radius:14px;display:none;text-align:center}
+#screensaver{position:fixed;z-index:8;inset:0;display:none;align-items:flex-end;justify-content:space-between;padding:5vw;background:linear-gradient(0deg,#0009,transparent 55%);pointer-events:none}
+#screensaver.show{display:flex}
+#screensaver .large{font-size:clamp(35px,5vw,75px);font-weight:300}
+body.idle main,body.idle #shade{opacity:0;pointer-events:none}
+main,#shade{transition:opacity 1s}
+@media(max-width:750px){
+main{padding:18px;gap:20px}
+.cities{grid-template-columns:repeat(2,1fr)}
+.dock{grid-template-columns:repeat(4,1fr)}
+.app{height:75px}
+nav{flex-wrap:wrap}
+nav button{flex:1 0 22%}
+.forecast{grid-template-columns:repeat(5,1fr)}
+}
 </style>
 </head>
 <body>
-<div id="background"></div><div class="shade"></div>
+<div id="bg"></div>
+<div id="shade"></div>
+
 <main>
 <header>
-<div><div class="brand">✦ The Jouadis TV</div><div class="subtitle">Your Family Entertainment</div></div>
-<div class="clock"><div id="time">--:--</div><div id="date"></div></div>
+<div>
+<div class="brand">✦ The Jouadis TV</div>
+<div class="subtitle">Your Family Entertainment</div>
+</div>
+<div class="clock">
+<div id="time">--:--</div>
+<div id="date"></div>
+</div>
 </header>
-<section class="top">
-<div class="weather">
+
+<section class="weather">
 <h1 id="cityName">Casablanca</h1>
-<div class="temp" id="temperature">--°C</div>
+<div class="temp" id="temp">--°C</div>
 <div id="condition">Loading weather...</div>
 <p id="highlow"></p>
-</div>
+<div id="landmark"></div>
 </section>
+
 <section class="cities" id="cities"></section>
-<section class="apps" id="apps"></section>
-<nav id="navigation"></nav>
+<section class="dock" id="dock"></section>
+<nav id="nav"></nav>
 </main>
-<div id="message" role="status"></div>
+
+<div class="panel" id="forecastPanel">
+<button class="close" onclick="closePanels()">✕</button>
+<h2 id="forecastTitle">Five-day forecast</h2>
+<div class="forecast" id="forecast"></div>
+<p style="color:#aaa;font-size:12px">
+Weather provided by Open-Meteo.
+</p>
+</div>
+
+<div class="panel" id="settingsPanel">
+<button class="close" onclick="closePanels()">✕</button>
+<h2>⚙ Quick Settings</h2>
+
+<label>Choose city
+<select id="citySelect" onchange="selectCity(Number(this.value))">
+<option value="0">Casablanca</option>
+<option value="1">Newcastle</option>
+<option value="2">London</option>
+<option value="3">Manchester</option>
+</select>
+</label>
+
+<label>
+<input type="checkbox" id="autoSwitch" checked onchange="restartRotation()">
+Automatic city rotation (12 seconds)
+</label>
+
+<label>
+<input type="checkbox" id="screenOn" checked>
+Enable cinematic screensaver
+</label>
+
+<label>
+<input type="checkbox" id="motionOn" checked>
+Enable cinematic zoom
+</label>
+
+<button onclick="startScreensaver()">Preview screensaver</button>
+<button onclick="closePanels()">Done</button>
+</div>
+
+<div id="screensaver">
+<div>
+<div class="large" id="saveCity"></div>
+<div id="saveWeather"></div>
+</div>
+<div class="large" id="saveClock"></div>
+</div>
+
+<div id="toast" role="status"></div>
+
 <script>
 var cities=[
-{name:"Casablanca",lat:33.5731,lon:-7.5898,zone:"Africa/Casablanca",photo:"https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=1600"},
-{name:"Newcastle",lat:54.9783,lon:-1.6178,zone:"Europe/London",photo:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600"},
-{name:"London",lat:51.5074,lon:-0.1278,zone:"Europe/London",photo:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600"},
-{name:"Manchester",lat:53.4808,lon:-2.2426,zone:"Europe/London",photo:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1600"}
+{
+name:"Casablanca",
+lat:33.5731,lon:-7.5898,
+zone:"Africa/Casablanca",
+landmark:"Hassan II Mosque",
+photo:"https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=1600"
+},
+{
+name:"Newcastle",
+lat:54.9783,lon:-1.6178,
+zone:"Europe/London",
+landmark:"Tyne Bridge",
+photo:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600"
+},
+{
+name:"London",
+lat:51.5074,lon:-0.1278,
+zone:"Europe/London",
+landmark:"Big Ben",
+photo:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600"
+},
+{
+name:"Manchester",
+lat:53.4808,lon:-2.2426,
+zone:"Europe/London",
+landmark:"Manchester Town Hall",
+photo:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1600"
+}
 ];
-var current=0, timer, weatherCache={};
-var apps=["Netflix","YouTube","Prime Video","Apple TV","Disney+","Spotify","Shahid"];
-var sections=["⌂ Home","▣ Movies","▣ Series","◉ Live TV","♫ Music","☁ Weather","⚙ Settings"];
-var descriptions={0:"Clear",1:"Mainly clear",2:"Partly cloudy",3:"Cloudy",45:"Foggy",48:"Foggy",51:"Light drizzle",61:"Rain",63:"Rain",65:"Heavy rain",71:"Snow",80:"Rain showers",95:"Thunderstorms"};
-function showMessage(s){
-var el=document.getElementById("message");el.textContent=s;el.style.display="block";
-setTimeout(function(){el.style.display="none"},3500);
+
+var apps=[
+["Netflix","netflix","E50914"],
+["YouTube","youtube","FF0033"],
+["Prime Video","primevideo","00A8E1"],
+["Apple TV","appletv","FFFFFF"],
+["Disney+","disneyplus","FFFFFF"],
+["Spotify","spotify","1ED760"],
+["Shahid","shahid","FFFFFF"]
+];
+
+var sections=[
+"⌂ Home","▣ Movies","▣ Series",
+"◉ Live TV","♫ Music","☁ Weather","⚙ Settings"
+];
+
+var conditions={
+0:"Clear sky",1:"Mainly clear",
+2:"Partly cloudy",3:"Cloudy",
+45:"Foggy",48:"Foggy",
+51:"Light drizzle",53:"Drizzle",
+55:"Heavy drizzle",61:"Light rain",
+63:"Rain",65:"Heavy rain",
+71:"Light snow",73:"Snow",
+75:"Heavy snow",80:"Rain showers",
+81:"Rain showers",82:"Heavy showers",
+95:"Thunderstorms",96:"Thunderstorms",
+99:"Thunderstorms"
+};
+
+var current=0;
+var weatherCache={};
+var rotationTimer;
+var idleTimer;
+var toastTimer;
+var currentWeather="";
+
+function byId(id){
+return document.getElementById(id);
 }
+
+function toast(message){
+var el=byId("toast");
+el.textContent=message;
+el.style.display="block";
+clearTimeout(toastTimer);
+toastTimer=setTimeout(function(){
+el.style.display="none";
+},3000);
+}
+
 function clock(){
-var d=new Date();
-document.getElementById("time").textContent=d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:cities[current].zone});
-document.getElementById("date").textContent=d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",timeZone:cities[current].zone});
+var now=new Date();
+var zone=cities[current].zone;
+var time=now.toLocaleTimeString("en-GB",{
+hour:"2-digit",minute:"2-digit",timeZone:zone
+});
+byId("time").textContent=time;
+byId("saveClock").textContent=time;
+byId("date").textContent=now.toLocaleDateString("en-GB",{
+weekday:"long",day:"numeric",
+month:"short",year:"numeric",timeZone:zone
+});
 }
-function render(){
-var c=cities[current];
-document.getElementById("cityName").textContent=c.name;
-document.getElementById("background").style.backgroundImage='url("'+c.photo+'")';
-document.getElementById("cities").innerHTML=cities.map(function(x,i){
-return '<button class="city '+(i===current?'active':'')+'" data-city="'+i+'" style="background-image:linear-gradient(0deg,#000b,transparent),url(\''+x.photo+'\')">'+x.name+'</button>';
+
+function renderCities(){
+byId("cities").innerHTML=cities.map(function(c,i){
+return '<button class="city '+
+(i===current?"active":"")+
+'" data-city="'+i+'" style="background-image:linear-gradient(0deg,#000b,transparent),url(\''+
+c.photo+'\')">'+c.name+"</button>";
 }).join("");
-document.querySelectorAll("[data-city]").forEach(function(b){b.onclick=function(){selectCity(Number(b.dataset.city));};});
-clock();getWeather();
+
+document.querySelectorAll("[data-city]").forEach(function(b){
+b.onclick=function(){
+selectCity(Number(b.getAttribute("data-city")));
+};
+});
 }
-function selectCity(i){
-current=(i+cities.length)%cities.length;render();
-clearInterval(timer);timer=setInterval(function(){current=(current+1)%cities.length;render()},12000);
+
+function renderApps(){
+byId("dock").innerHTML=apps.map(function(a,i){
+var icon="https://cdn.simpleicons.org/"+a[1]+"/"+a[2];
+return '<button class="app" data-app="'+i+'" aria-label="'+a[0]+'" title="'+a[0]+'">'+
+'<img src="'+icon+'" alt="'+a[0]+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'+
+'<span class="fallback">'+a[0].charAt(0)+"</span></button>";
+}).join("");
+
+document.querySelectorAll("[data-app]").forEach(function(b){
+b.onclick=function(){
+toast(apps[Number(b.getAttribute("data-app"))][0]+
+" — app shortcut demonstration");
+};
+});
 }
-async function getWeather(){
+
+function renderNav(){
+byId("nav").innerHTML=sections.map(function(s,i){
+return '<button data-nav="'+i+'" class="'+
+(i===0?"active":"")+'">'+s+"</button>";
+}).join("");
+
+document.querySelectorAll("[data-nav]").forEach(function(b){
+b.onclick=function(){
+var n=Number(b.getAttribute("data-nav"));
+if(n===5){openForecast();return;}
+if(n===6){openSettings();return;}
+if(n===0){closePanels();return;}
+toast(sections[n]+" — coming soon");
+};
+});
+}
+
+function showWeather(data){
+var t=Math.round(data.current.temperature_2m);
+currentWeather=t+"°C";
+byId("temp").textContent=currentWeather;
+byId("condition").textContent=
+conditions[data.current.weather_code]||"Current conditions";
+byId("highlow").textContent=
+"H: "+Math.round(data.daily.temperature_2m_max[0])+
+"°   L: "+Math.round(data.daily.temperature_2m_min[0])+"°";
+byId("saveWeather").textContent=currentWeather+
+" · "+byId("condition").textContent;
+}
+
+async function loadWeather(){
 var c=cities[current],key=c.name;
-if(weatherCache[key]&&Date.now()-weatherCache[key].at<600000){displayWeather(weatherCache[key].data);return;}
-document.getElementById("temperature").textContent="--°C";
-document.getElementById("condition").textContent="Loading weather...";
-document.getElementById("highlow").textContent="";
+var cached=weatherCache[key];
+
+if(cached&&Date.now()-cached.at<600000){
+showWeather(cached.data);
+return;
+}
+
+byId("temp").textContent="--°C";
+byId("condition").textContent="Loading weather...";
+byId("highlow").textContent="";
+byId("saveWeather").textContent="Loading weather...";
+
 try{
-var url="https://api.open-meteo.com/v1/forecast?latitude="+c.lat+"&longitude="+c.lon+"&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1";
-var response=await fetch(url);if(!response.ok)throw Error("Weather unavailable");
+var url="https://api.open-meteo.com/v1/forecast"+
+"?latitude="+c.lat+
+"&longitude="+c.lon+
+"&current=temperature_2m,weather_code"+
+"&daily=weather_code,temperature_2m_max,temperature_2m_min"+
+"&timezone=auto&forecast_days=5";
+var response=await fetch(url);
+if(!response.ok)throw Error("Weather unavailable");
 var data=await response.json();
 weatherCache[key]={data:data,at:Date.now()};
-if(cities[current].name===key)displayWeather(data);
-}catch(e){if(cities[current].name===key)document.getElementById("condition").textContent="Weather temporarily unavailable";}
+if(cities[current].name===key)showWeather(data);
+}catch(e){
+if(cities[current].name===key){
+byId("condition").textContent="Weather unavailable";
+byId("saveWeather").textContent="Weather unavailable";
 }
-function displayWeather(d){
-document.getElementById("temperature").textContent=Math.round(d.current.temperature_2m)+"°C";
-document.getElementById("condition").textContent=descriptions[d.current.weather_code]||"Current conditions";
-document.getElementById("highlow").textContent="H: "+Math.round(d.daily.temperature_2m_max[0])+"°  L: "+Math.round(d.daily.temperature_2m_min[0])+"°";
 }
-document.getElementById("apps").innerHTML=apps.map(function(a){return '<button class="app" data-app="'+a+'">'+a+"</button>";}).join("");
-document.querySelectorAll("[data-app]").forEach(function(b){b.onclick=function(){showMessage(b.dataset.app+" — shortcut demonstration");};});
-document.getElementById("navigation").innerHTML=sections.map(function(s){return "<button>"+s+"</button>";}).join("");
-document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){showMessage(b.textContent+" — coming soon");};});
-document.addEventListener("keydown",function(e){
-if(e.key==="ArrowRight"||e.key==="ArrowLeft"){
-var focusable=Array.from(document.querySelectorAll("button"));
-var i=focusable.indexOf(document.activeElement);
-if(i>=0){e.preventDefault();focusable[(i+(e.key==="ArrowRight"?1:-1)+focusable.length)%focusable.length].focus();}
 }
-if(e.key==="Enter"&&document.activeElement.tagName==="BUTTON")document.activeElement.click();
+
+function render(){
+var c=cities[current];
+byId("cityName").textContent=c.name;
+byId("saveCity").textContent=c.name;
+byId("landmark").textContent=c.landmark;
+byId("citySelect").value=String(current);
+
+var bg=byId("bg");
+bg.style.opacity=".45";
+setTimeout(function(){
+bg.style.backgroundImage='url("'+c.photo+'")';
+bg.style.opacity="1";
+bg.style.transition="opacity .7s,transform 12s linear";
+bg.style.transform="scale(1.02)";
+if(byId("motionOn").checked){
+setTimeout(function(){
+bg.style.transform="scale(1.12)";
+},100);
+}
+},250);
+
+renderCities();
+clock();
+loadWeather();
+}
+
+function nextCity(){
+current=(current+1)%cities.length;
+render();
+}
+
+function restartRotation(){
+clearInterval(rotationTimer);
+if(byId("autoSwitch").checked){
+rotationTimer=setInterval(nextCity,12000);
+}
+}
+
+function selectCity(index){
+current=index;
+render();
+restartRotation();
+}
+
+function closePanels(){
+byId("forecastPanel").classList.remove("open");
+byId("settingsPanel").classList.remove("open");
+}
+
+function openSettings(){
+closePanels();
+byId("settingsPanel").classList.add("open");
+}
+
+function openForecast(){
+closePanels();
+var c=cities[current];
+byId("forecastTitle").textContent=
+c.name+" — Five-day forecast";
+var cached=weatherCache[c.name];
+
+if(!cached){
+byId("forecast").textContent="Weather is loading...";
+byId("forecastPanel").classList.add("open");
+loadWeather().then(function(){
+if(byId("forecastPanel").classList.contains("open")){
+openForecast();
+}
 });
-render();setInterval(clock,30000);
-timer=setInterval(function(){current=(current+1)%cities.length;render()},12000);
+return;
+}
+
+var d=cached.data.daily;
+byId("forecast").innerHTML=d.time.map(function(date,i){
+var day=new Date(date+"T12:00:00Z");
+var label=day.toLocaleDateString("en-GB",{
+weekday:"short",timeZone:"UTC"
+});
+return '<div class="day">'+label+
+'<strong>'+Math.round(d.temperature_2m_max[i])+"°</strong>"+
+Math.round(d.temperature_2m_min[i])+"°"+
+'<div style="margin-top:8px">'+
+(conditions[d.weather_code[i]]||"Weather")+
+"</div></div>";
+}).join("");
+
+byId("forecastPanel").classList.add("open");
+}
+
+function startScreensaver(){
+if(!byId("screenOn").checked)return;
+closePanels();
+document.body.classList.add("idle");
+byId("screensaver").classList.add("show");
+}
+
+function wake(){
+document.body.classList.remove("idle");
+byId("screensaver").classList.remove("show");
+clearTimeout(idleTimer);
+idleTimer=setTimeout(function(){
+if(!byId("forecastPanel").classList.contains("open")&&
+!byId("settingsPanel").classList.contains("open")){
+startScreensaver();
+}
+},180000);
+}
+
+document.addEventListener("pointerdown",function(){
+if(document.body.classList.contains("idle")){
+wake();
+}
+else{
+clearTimeout(idleTimer);
+idleTimer=setTimeout(startScreensaver,180000);
+}
+});
+
+document.addEventListener("keydown",function(e){
+if(document.body.classList.contains("idle")){
+wake();
+e.preventDefault();
+return;
+}
+wake();
+
+if(e.key==="Escape"||e.key==="Backspace"){
+closePanels();
+return;
+}
+
+if(byId("settingsPanel").classList.contains("open")||
+byId("forecastPanel").classList.contains("open"))return;
+
+var buttons=Array.from(document.querySelectorAll(
+".cities button,.dock button,nav button"
+));
+var index=buttons.indexOf(document.activeElement);
+var direction=0;
+if(e.key==="ArrowRight")direction=1;
+if(e.key==="ArrowLeft")direction=-1;
+if(e.key==="ArrowDown")direction=1;
+if(e.key==="ArrowUp")direction=-1;
+
+if(direction){
+if(index<0)index=0;
+else index=(index+direction+buttons.length)%buttons.length;
+buttons[index].focus();
+e.preventDefault();
+}
+if(e.key==="Enter"&&document.activeElement.tagName==="BUTTON"){
+document.activeElement.click();
+}
+});
+
+renderApps();
+renderNav();
+render();
+restartRotation();
+clock();
+setInterval(clock,30000);
+wake();
 </script>
 </body>
 </html>
