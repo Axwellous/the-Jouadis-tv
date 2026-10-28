@@ -3,67 +3,193 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Jouadis TV — V5</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080d18">
+<title>The Jouadis TV — Version 6</title>
 <style>
+:root{
+  --glass:rgba(13,21,36,.65);
+  --border:rgba(255,255,255,.25);
+}
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;min-height:100%;background:#07101d;color:white;font-family:Arial,sans-serif}
-body{overflow-x:hidden}
-button{font:inherit;cursor:pointer;color:inherit}
+html,body{
+  margin:0;width:100%;height:100%;
+  background:#080d18;color:white;
+  font-family:-apple-system,BlinkMacSystemFont,
+  "Segoe UI",Arial,sans-serif;
+}
+body{overflow:hidden}
+button,select,input{font:inherit}
+button{cursor:pointer;color:white;-webkit-tap-highlight-color:transparent}
+button:focus-visible,select:focus-visible{
+  outline:3px solid white;outline-offset:3px;
+}
 #bg,#shade{position:fixed;inset:0;pointer-events:none}
-#bg{background-size:cover;background-position:center;z-index:0;transition:opacity .7s,transform 12s linear;transform:scale(1.02)}
-#shade{z-index:1;background:linear-gradient(90deg,#020711dd,#02071130),linear-gradient(0deg,#020711ed,transparent 75%)}
-main{position:relative;z-index:2;min-height:100vh;min-height:100dvh;padding:2.5vw 4vw;display:flex;flex-direction:column;justify-content:space-between;gap:15px}
-header,.topbar{display:flex;justify-content:space-between;align-items:flex-start}
-.brand{font:italic clamp(27px,3.5vw,54px) Georgia,serif}
-.subtitle{font-size:13px;color:#ddd;margin-top:8px}
-.clock{text-align:right;font-size:clamp(24px,3vw,45px)}
-#date{font-size:14px;color:#ddd;margin-top:6px}
-.weather h1{font-size:clamp(36px,5vw,75px);font-weight:400;margin:0}
-.temp{font-size:clamp(65px,9vw,125px);font-weight:200}
-#condition{font-size:22px}
-#highlow{color:#ddd}
-#landmark{color:#ddd;font-size:14px;margin-top:10px}
-.cities{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.city{height:clamp(65px,9vw,115px);border-radius:16px;border:1px solid #ffffff65;background-size:cover;background-position:center;text-shadow:0 2px 8px black;font-weight:bold}
-.city.active{border:2px solid white;box-shadow:0 0 15px #ffffff55}
-.dock{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;background:#101a2ab8;border:1px solid #ffffff30;padding:14px;border-radius:26px;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px)}
-.app{height:clamp(65px,8vw,105px);border:1px solid #ffffff25;border-radius:18px;background:#101625cc;display:flex;align-items:center;justify-content:center;transition:transform .2s}
-.app img{width:64%;height:64%;object-fit:contain}
-.app:hover,.app:focus{transform:scale(1.09);background:#26364d}
-.app .fallback{display:none;font-weight:bold;font-size:24px}
-nav{display:flex;justify-content:space-around;gap:5px;background:#111b2acc;border-radius:22px;padding:9px}
-nav button{background:transparent;border:0;border-radius:12px;padding:12px}
-nav button.active{background:#ffffff30}
-button:focus{outline:3px solid white;outline-offset:3px}
-.panel{position:fixed;z-index:10;top:5%;right:4%;width:min(420px,92vw);max-height:90vh;overflow:auto;background:#101b2bf2;border:1px solid #ffffff45;border-radius:24px;padding:25px;box-shadow:0 15px 60px #0009;display:none;backdrop-filter:blur(20px)}
+#bg{
+  background-position:center;background-size:cover;
+  z-index:0;transform:scale(1.03);
+  transition:opacity .65s ease,transform 12s linear;
+}
+#shade{
+  z-index:1;
+  background:linear-gradient(90deg,rgba(2,7,18,.86),rgba(2,7,18,.13) 85%),
+  linear-gradient(0deg,rgba(2,7,18,.85),transparent 75%);
+}
+main{
+  position:relative;z-index:2;
+  height:100vh;height:100dvh;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  gap:8px;
+  padding:clamp(12px,2.2vh,26px) 4vw;
+  padding-bottom:max(12px,env(safe-area-inset-bottom));
+}
+header{display:flex;justify-content:space-between;align-items:flex-start}
+.brand{
+  font:italic clamp(24px,3.1vw,48px) Georgia,serif;
+  letter-spacing:-1px;
+}
+.subtitle{font-size:clamp(10px,1.1vw,14px);color:#ddd;margin-top:5px}
+.clock{text-align:right;font-size:clamp(22px,2.8vw,40px);font-weight:300}
+#date{font-size:12px;color:#ddd;margin-top:4px}
+.weather{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+.weather h1{
+  font-size:clamp(34px,4.7vw,72px);
+  font-weight:450;margin:0 0 4px;
+}
+.temp{
+  font-size:clamp(64px,8.5vw,125px);
+  font-weight:200;line-height:1.05;
+  letter-spacing:-4px;
+}
+#condition{font-size:clamp(14px,1.8vw,22px)}
+#highlow,#landmark{font-size:clamp(11px,1.15vw,15px);color:#e2e6ec;margin-top:7px}
+.cities{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.city{
+  min-width:0;height:clamp(55px,9vh,100px);
+  background-color:#1b293c;
+  background-size:cover;background-position:center;
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:14px;
+  font-size:clamp(11px,1.3vw,17px);
+  font-weight:600;text-shadow:0 2px 8px black;
+}
+.city.active{
+  border:2px solid white;
+  box-shadow:0 0 14px #ffffff55;
+}
+.dock{
+  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:9px;
+  padding:10px;
+  border-radius:24px;
+  border:1px solid var(--border);
+  background:var(--glass);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+.app{
+  min-width:0;height:clamp(56px,9vh,95px);
+  display:flex;align-items:center;justify-content:center;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(18,29,48,.8);
+  transition:transform .2s,background .2s;
+}
+.app:hover,.app:focus{
+  transform:scale(1.06);
+  background:rgba(46,64,90,.9);
+}
+.app svg{width:56%;height:56%;max-width:70px;max-height:65px}
+.app .wordmark{font-weight:800;font-size:clamp(13px,1.7vw,24px)}
+nav{
+  display:flex;justify-content:space-around;
+  gap:4px;padding:5px;
+  border-radius:17px;
+  background:rgba(12,21,36,.72);
+  border:1px solid rgba(255,255,255,.13);
+}
+nav button{
+  flex:1;min-width:0;border:0;
+  background:transparent;border-radius:11px;
+  padding:9px 3px;
+  font-size:clamp(10px,1.2vw,15px);
+}
+nav button.active{background:rgba(255,255,255,.2)}
+.panel{
+  position:fixed;z-index:20;
+  top:5%;right:4%;width:min(470px,92vw);
+  max-height:88vh;overflow:auto;
+  padding:24px;border-radius:24px;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(12,23,41,.97);
+  box-shadow:0 20px 65px #0009;
+  display:none;
+}
 .panel.open{display:block}
-.panel h2{margin-top:0;font-weight:400}
-.panel button,.panel select{background:#ffffff18;border:1px solid #ffffff40;color:white;border-radius:12px;padding:12px;margin:5px}
+.panel h2{font-weight:400;margin:0 0 20px}
+.panel button,.panel select{
+  padding:10px;border-radius:11px;
+  background:#ffffff1b;
+  border:1px solid #ffffff50;color:white;
+}
 .panel select option{color:black}
-.panel label{display:block;margin:15px 0}
-.forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
-.day{background:#ffffff13;border-radius:12px;padding:10px 4px;text-align:center;font-size:12px}
-.day strong{display:block;font-size:18px;margin:10px 0}
+.panel label{display:block;margin:17px 0}
+.panel input{margin-right:8px}
 .close{float:right}
-#toast{position:fixed;z-index:20;bottom:110px;left:50%;transform:translateX(-50%);background:#142338;border:1px solid #ffffff50;padding:14px 25px;border-radius:14px;display:none;text-align:center}
-#screensaver{position:fixed;z-index:8;inset:0;display:none;align-items:flex-end;justify-content:space-between;padding:5vw;background:linear-gradient(0deg,#0009,transparent 55%);pointer-events:none}
+.forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.day{
+  text-align:center;background:#ffffff12;
+  padding:12px 4px;border-radius:12px;font-size:12px;
+}
+.day strong{display:block;font-size:20px;margin:10px 0}
+#toast{
+  position:fixed;z-index:30;
+  left:50%;bottom:12%;transform:translateX(-50%);
+  background:#14233beF;border:1px solid #ffffff50;
+  padding:14px 20px;border-radius:14px;
+  text-align:center;display:none;max-width:90vw;
+}
+#screensaver{
+  position:fixed;z-index:10;inset:0;
+  display:none;align-items:flex-end;
+  justify-content:space-between;
+  padding:5vw;pointer-events:none;
+  background:linear-gradient(0deg,#0009,transparent 60%);
+}
 #screensaver.show{display:flex}
-#screensaver .large{font-size:clamp(35px,5vw,75px);font-weight:300}
+#screensaver .large{font-size:clamp(32px,5vw,72px);font-weight:300}
 body.idle main,body.idle #shade{opacity:0;pointer-events:none}
-main,#shade{transition:opacity 1s}
-@media(max-width:750px){
-main{padding:18px;gap:20px}
-.cities{grid-template-columns:repeat(2,1fr)}
-.dock{grid-template-columns:repeat(4,1fr)}
-.app{height:75px}
-nav{flex-wrap:wrap}
-nav button{flex:1 0 22%}
-.forecast{grid-template-columns:repeat(5,1fr)}
+main,#shade{transition:opacity .8s}
+@media(max-width:650px){
+  main{padding:12px;gap:6px}
+  .cities{gap:5px}
+  .city{height:55px;font-size:10px}
+  .dock{gap:5px;padding:6px;border-radius:16px}
+  .app{height:57px;border-radius:11px}
+  nav button{font-size:9px;padding:7px 2px}
+  .weather h1{font-size:32px}
+  .temp{font-size:64px}
+  .forecast{grid-template-columns:repeat(5,1fr)}
+}
+@media(max-height:550px){
+  main{gap:4px;padding-top:8px;padding-bottom:8px}
+  .city{height:50px}
+  .app{height:53px}
+  .weather h1{font-size:32px}
+  .temp{font-size:58px}
+  #landmark,#highlow{margin-top:3px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{scroll-behavior:auto!important}
 }
 </style>
 </head>
 <body>
+
 <div id="bg"></div>
 <div id="shade"></div>
 
@@ -83,7 +209,7 @@ nav button{flex:1 0 22%}
 <h1 id="cityName">Casablanca</h1>
 <div class="temp" id="temp">--°C</div>
 <div id="condition">Loading weather...</div>
-<p id="highlow"></p>
+<div id="highlow"></div>
 <div id="landmark"></div>
 </section>
 
@@ -92,20 +218,17 @@ nav button{flex:1 0 22%}
 <nav id="nav"></nav>
 </main>
 
-<div class="panel" id="forecastPanel">
+<section class="panel" id="forecastPanel">
 <button class="close" onclick="closePanels()">✕</button>
 <h2 id="forecastTitle">Five-day forecast</h2>
 <div class="forecast" id="forecast"></div>
-<p style="color:#aaa;font-size:12px">
-Weather provided by Open-Meteo.
-</p>
-</div>
+<p style="color:#b8c5d5;font-size:12px">Weather data: Open-Meteo</p>
+</section>
 
-<div class="panel" id="settingsPanel">
+<section class="panel" id="settingsPanel">
 <button class="close" onclick="closePanels()">✕</button>
-<h2>⚙ Quick Settings</h2>
-
-<label>Choose city
+<h2>Quick Settings</h2>
+<label>City
 <select id="citySelect" onchange="selectCity(Number(this.value))">
 <option value="0">Casablanca</option>
 <option value="1">Newcastle</option>
@@ -113,25 +236,12 @@ Weather provided by Open-Meteo.
 <option value="3">Manchester</option>
 </select>
 </label>
-
-<label>
-<input type="checkbox" id="autoSwitch" checked onchange="restartRotation()">
-Automatic city rotation (12 seconds)
-</label>
-
-<label>
-<input type="checkbox" id="screenOn" checked>
-Enable cinematic screensaver
-</label>
-
-<label>
-<input type="checkbox" id="motionOn" checked>
-Enable cinematic zoom
-</label>
-
+<label><input type="checkbox" id="autoSwitch" checked onchange="restartRotation()">Automatic city switching — 12 seconds</label>
+<label><input type="checkbox" id="screenOn" checked onchange="wake()">Enable cinematic screensaver</label>
+<label><input type="checkbox" id="motionOn" checked onchange="renderBackground()">Enable cinematic zoom</label>
 <button onclick="startScreensaver()">Preview screensaver</button>
 <button onclick="closePanels()">Done</button>
-</div>
+</section>
 
 <div id="screensaver">
 <div>
@@ -144,345 +254,301 @@ Enable cinematic zoom
 <div id="toast" role="status"></div>
 
 <script>
+"use strict";
+
 var cities=[
 {
-name:"Casablanca",
-lat:33.5731,lon:-7.5898,
-zone:"Africa/Casablanca",
-landmark:"Hassan II Mosque",
+name:"Casablanca",lat:33.5731,lon:-7.5898,
+zone:"Africa/Casablanca",landmark:"Hassan II Mosque",
 photo:"https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=1600"
 },
 {
-name:"Newcastle",
-lat:54.9783,lon:-1.6178,
-zone:"Europe/London",
-landmark:"Tyne Bridge",
+name:"Newcastle",lat:54.9783,lon:-1.6178,
+zone:"Europe/London",landmark:"Tyne Bridge",
+photo:"https://images.unsplash.com/photo-1565591368202-3e8b11d3f9b8?w=1600"
+},
+{
+name:"London",lat:51.5074,lon:-0.1278,
+zone:"Europe/London",landmark:"Big Ben",
 photo:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600"
 },
 {
-name:"London",
-lat:51.5074,lon:-0.1278,
-zone:"Europe/London",
-landmark:"Big Ben",
-photo:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600"
-},
-{
-name:"Manchester",
-lat:53.4808,lon:-2.2426,
-zone:"Europe/London",
-landmark:"Manchester Town Hall",
+name:"Manchester",lat:53.4808,lon:-2.2426,
+zone:"Europe/London",landmark:"Manchester city centre",
 photo:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1600"
 }
 ];
 
-var apps=[
-["Netflix","netflix","E50914"],
-["YouTube","youtube","FF0033"],
-["Prime Video","primevideo","00A8E1"],
-["Apple TV","appletv","FFFFFF"],
-["Disney+","disneyplus","FFFFFF"],
-["Spotify","spotify","1ED760"],
-["Shahid","shahid","FFFFFF"]
-];
-
-var sections=[
-"⌂ Home","▣ Movies","▣ Series",
-"◉ Live TV","♫ Music","☁ Weather","⚙ Settings"
-];
-
 var conditions={
-0:"Clear sky",1:"Mainly clear",
-2:"Partly cloudy",3:"Cloudy",
-45:"Foggy",48:"Foggy",
-51:"Light drizzle",53:"Drizzle",
-55:"Heavy drizzle",61:"Light rain",
-63:"Rain",65:"Heavy rain",
-71:"Light snow",73:"Snow",
-75:"Heavy snow",80:"Rain showers",
-81:"Rain showers",82:"Heavy showers",
-95:"Thunderstorms",96:"Thunderstorms",
-99:"Thunderstorms"
+0:"Clear sky",1:"Mainly clear",2:"Partly cloudy",
+3:"Cloudy",45:"Foggy",48:"Foggy",
+51:"Light drizzle",53:"Drizzle",55:"Heavy drizzle",
+61:"Light rain",63:"Rain",65:"Heavy rain",
+71:"Light snow",73:"Snow",75:"Heavy snow",
+80:"Rain showers",81:"Rain showers",82:"Heavy showers",
+95:"Thunderstorms",96:"Thunderstorms",99:"Thunderstorms"
 };
 
 var current=0;
 var weatherCache={};
-var rotationTimer;
-var idleTimer;
-var toastTimer;
-var currentWeather="";
+var rotationTimer,idleTimer,toastTimer,bgTimer;
+var idle=false;
+var requestNumber=0;
 
-function byId(id){
-return document.getElementById(id);
+function el(id){return document.getElementById(id)}
+
+function iconNetflix(){
+return '<svg viewBox="0 0 64 64"><path fill="#E50914" d="M13 5h12l26 46V5h-12v54L13 14z"/><path fill="#B1060E" d="M13 5h12v54H13z"/><path fill="#E50914" d="M39 5h12v54H39z"/></svg>';
+}
+function iconYouTube(){
+return '<svg viewBox="0 0 64 64"><rect x="5" y="15" width="54" height="34" rx="11" fill="#FF0033"/><path d="M27 23L43 32 27 41z" fill="white"/></svg>';
+}
+function iconPrime(){
+return '<svg viewBox="0 0 64 64"><rect x="4" y="4" width="56" height="56" rx="15" fill="#00A8E1"/><path d="M14 39Q32 51 50 37" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/><path d="M43 35l8 1-4 7" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/><text x="32" y="31" text-anchor="middle" fill="white" font-family="Arial" font-size="19" font-weight="bold">prime</text></svg>';
+}
+function iconApple(){
+return '<svg viewBox="0 0 64 64"><text x="32" y="40" fill="white" text-anchor="middle" font-size="27" font-family="Arial" font-weight="bold">tv</text><circle cx="14" cy="31" r="7" fill="white"/><path d="M14 23Q15 17 20 18" stroke="white" stroke-width="3" fill="none"/></svg>';
+}
+function iconDisney(){
+return '<svg viewBox="0 0 64 64"><path d="M9 30Q31 4 56 28" fill="none" stroke="#88B9FF" stroke-width="3" stroke-linecap="round"/><text x="30" y="43" text-anchor="middle" fill="white" font-family="Georgia" font-style="italic" font-size="29">D</text><path d="M48 36h12M54 30v12" stroke="white" stroke-width="3"/></svg>';
+}
+function iconSpotify(){
+return '<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="#1ED760"/><path d="M16 25Q32 19 49 28M18 33Q32 28 46 36M21 40Q32 36 43 43" fill="none" stroke="#092314" stroke-width="4" stroke-linecap="round"/></svg>';
+}
+function iconShahid(){
+return '<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="25" fill="#7428E8"/><path d="M24 18L46 32 24 46z" fill="white"/></svg>';
 }
 
+var apps=[
+{name:"Netflix",icon:iconNetflix()},
+{name:"YouTube",icon:iconYouTube()},
+{name:"Prime Video",icon:iconPrime()},
+{name:"Apple TV",icon:iconApple()},
+{name:"Disney+",icon:iconDisney()},
+{name:"Spotify",icon:iconSpotify()},
+{name:"Shahid",icon:iconShahid()}
+];
+
+var sections=["⌂ Home","▣ Movies","▣ Series","◉ Live TV","♫ Music","☁ Weather","⚙ Settings"];
+
 function toast(message){
-var el=byId("toast");
-el.textContent=message;
-el.style.display="block";
+el("toast").textContent=message;
+el("toast").style.display="block";
 clearTimeout(toastTimer);
-toastTimer=setTimeout(function(){
-el.style.display="none";
-},3000);
+toastTimer=setTimeout(function(){el("toast").style.display="none"},3000);
 }
 
 function clock(){
-var now=new Date();
-var zone=cities[current].zone;
-var time=now.toLocaleTimeString("en-GB",{
-hour:"2-digit",minute:"2-digit",timeZone:zone
-});
-byId("time").textContent=time;
-byId("saveClock").textContent=time;
-byId("date").textContent=now.toLocaleDateString("en-GB",{
-weekday:"long",day:"numeric",
-month:"short",year:"numeric",timeZone:zone
+var now=new Date(),zone=cities[current].zone;
+var time=now.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:zone});
+el("time").textContent=time;
+el("saveClock").textContent=time;
+el("date").textContent=now.toLocaleDateString("en-GB",{
+weekday:"long",day:"numeric",month:"short",year:"numeric",timeZone:zone
 });
 }
 
-function renderCities(){
-byId("cities").innerHTML=cities.map(function(c,i){
-return '<button class="city '+
-(i===current?"active":"")+
-'" data-city="'+i+'" style="background-image:linear-gradient(0deg,#000b,transparent),url(\''+
-c.photo+'\')">'+c.name+"</button>";
-}).join("");
+function renderBackground(){
+var bg=el("bg"),photo=cities[current].photo;
+clearTimeout(bgTimer);
+bg.style.opacity=".3";
+bgTimer=setTimeout(function(){
+bg.style.transition="none";
+bg.style.backgroundImage='url("'+photo+'")';
+bg.style.transform="scale(1.02)";
+bg.offsetHeight;
+bg.style.transition="opacity .7s,transform 12s linear";
+bg.style.opacity="1";
+if(el("motionOn").checked)bg.style.transform="scale(1.12)";
+},220);
+}
 
+function renderCities(){
+el("cities").innerHTML=cities.map(function(c,i){
+return '<button class="city '+(i===current?"active":"")+
+'" data-city="'+i+'" style="background-image:linear-gradient(0deg,#000a,transparent),url(\''+
+c.photo+'\')">'+c.name+'</button>';
+}).join("");
 document.querySelectorAll("[data-city]").forEach(function(b){
-b.onclick=function(){
-selectCity(Number(b.getAttribute("data-city")));
-};
+b.onclick=function(){selectCity(Number(b.getAttribute("data-city")))};
 });
 }
 
 function renderApps(){
-byId("dock").innerHTML=apps.map(function(a,i){
-var icon="https://cdn.simpleicons.org/"+a[1]+"/"+a[2];
-return '<button class="app" data-app="'+i+'" aria-label="'+a[0]+'" title="'+a[0]+'">'+
-'<img src="'+icon+'" alt="'+a[0]+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'+
-'<span class="fallback">'+a[0].charAt(0)+"</span></button>";
+el("dock").innerHTML=apps.map(function(a,i){
+return '<button class="app" data-app="'+i+'" aria-label="'+a.name+'" title="'+a.name+'">'+a.icon+'</button>';
 }).join("");
-
 document.querySelectorAll("[data-app]").forEach(function(b){
 b.onclick=function(){
-toast(apps[Number(b.getAttribute("data-app"))][0]+
-" — app shortcut demonstration");
+toast(apps[Number(b.getAttribute("data-app"))].name+" — demonstration shortcut");
 };
 });
 }
 
 function renderNav(){
-byId("nav").innerHTML=sections.map(function(s,i){
-return '<button data-nav="'+i+'" class="'+
-(i===0?"active":"")+'">'+s+"</button>";
+el("nav").innerHTML=sections.map(function(s,i){
+return '<button data-nav="'+i+'" class="'+(i===0?"active":"")+'">'+s+'</button>';
 }).join("");
-
 document.querySelectorAll("[data-nav]").forEach(function(b){
 b.onclick=function(){
 var n=Number(b.getAttribute("data-nav"));
-if(n===5){openForecast();return;}
-if(n===6){openSettings();return;}
-if(n===0){closePanels();return;}
-toast(sections[n]+" — coming soon");
+if(n===5)openForecast();
+else if(n===6)openSettings();
+else if(n===0)closePanels();
+else toast(sections[n]+" — coming soon");
 };
 });
 }
 
 function showWeather(data){
 var t=Math.round(data.current.temperature_2m);
-currentWeather=t+"°C";
-byId("temp").textContent=currentWeather;
-byId("condition").textContent=
-conditions[data.current.weather_code]||"Current conditions";
-byId("highlow").textContent=
-"H: "+Math.round(data.daily.temperature_2m_max[0])+
+el("temp").textContent=t+"°C";
+el("condition").textContent=conditions[data.current.weather_code]||"Current conditions";
+el("highlow").textContent="H: "+Math.round(data.daily.temperature_2m_max[0])+
 "°   L: "+Math.round(data.daily.temperature_2m_min[0])+"°";
-byId("saveWeather").textContent=currentWeather+
-" · "+byId("condition").textContent;
+el("saveWeather").textContent=t+"°C · "+el("condition").textContent;
 }
 
 async function loadWeather(){
-var c=cities[current],key=c.name;
+var c=cities[current],key=c.name,token=++requestNumber;
 var cached=weatherCache[key];
-
 if(cached&&Date.now()-cached.at<600000){
-showWeather(cached.data);
-return;
+showWeather(cached.data);return;
 }
-
-byId("temp").textContent="--°C";
-byId("condition").textContent="Loading weather...";
-byId("highlow").textContent="";
-byId("saveWeather").textContent="Loading weather...";
-
+el("temp").textContent="--°C";
+el("condition").textContent="Loading weather...";
+el("highlow").textContent="";
+el("saveWeather").textContent="Loading weather...";
 try{
-var url="https://api.open-meteo.com/v1/forecast"+
-"?latitude="+c.lat+
+var url="https://api.open-meteo.com/v1/forecast?latitude="+c.lat+
 "&longitude="+c.lon+
 "&current=temperature_2m,weather_code"+
 "&daily=weather_code,temperature_2m_max,temperature_2m_min"+
 "&timezone=auto&forecast_days=5";
-var response=await fetch(url);
-if(!response.ok)throw Error("Weather unavailable");
-var data=await response.json();
+var r=await fetch(url);
+if(!r.ok)throw Error("Weather request failed");
+var data=await r.json();
 weatherCache[key]={data:data,at:Date.now()};
-if(cities[current].name===key)showWeather(data);
+if(token===requestNumber)showWeather(data);
 }catch(e){
-if(cities[current].name===key){
-byId("condition").textContent="Weather unavailable";
-byId("saveWeather").textContent="Weather unavailable";
+if(token===requestNumber){
+el("condition").textContent="Weather temporarily unavailable";
+el("saveWeather").textContent="Weather unavailable";
 }
 }
 }
 
 function render(){
 var c=cities[current];
-byId("cityName").textContent=c.name;
-byId("saveCity").textContent=c.name;
-byId("landmark").textContent=c.landmark;
-byId("citySelect").value=String(current);
-
-var bg=byId("bg");
-bg.style.opacity=".45";
-setTimeout(function(){
-bg.style.backgroundImage='url("'+c.photo+'")';
-bg.style.opacity="1";
-bg.style.transition="opacity .7s,transform 12s linear";
-bg.style.transform="scale(1.02)";
-if(byId("motionOn").checked){
-setTimeout(function(){
-bg.style.transform="scale(1.12)";
-},100);
-}
-},250);
-
-renderCities();
-clock();
-loadWeather();
+el("cityName").textContent=c.name;
+el("saveCity").textContent=c.name;
+el("landmark").textContent=c.landmark;
+el("citySelect").value=String(current);
+renderBackground();renderCities();clock();loadWeather();
 }
 
-function nextCity(){
-current=(current+1)%cities.length;
-render();
-}
+function nextCity(){current=(current+1)%cities.length;render()}
 
 function restartRotation(){
 clearInterval(rotationTimer);
-if(byId("autoSwitch").checked){
-rotationTimer=setInterval(nextCity,12000);
-}
+if(el("autoSwitch").checked)rotationTimer=setInterval(nextCity,12000);
 }
 
-function selectCity(index){
-current=index;
-render();
-restartRotation();
+function selectCity(i){
+current=Math.max(0,Math.min(cities.length-1,i));
+render();restartRotation();
 }
 
 function closePanels(){
-byId("forecastPanel").classList.remove("open");
-byId("settingsPanel").classList.remove("open");
+el("forecastPanel").classList.remove("open");
+el("settingsPanel").classList.remove("open");
 }
 
 function openSettings(){
-closePanels();
-byId("settingsPanel").classList.add("open");
+closePanels();el("settingsPanel").classList.add("open");wake();
 }
 
 function openForecast(){
 closePanels();
 var c=cities[current];
-byId("forecastTitle").textContent=
-c.name+" — Five-day forecast";
+el("forecastTitle").textContent=c.name+" — Five-day forecast";
 var cached=weatherCache[c.name];
-
 if(!cached){
-byId("forecast").textContent="Weather is loading...";
-byId("forecastPanel").classList.add("open");
+el("forecast").textContent="Loading forecast...";
+el("forecastPanel").classList.add("open");
 loadWeather().then(function(){
-if(byId("forecastPanel").classList.contains("open")){
-openForecast();
+if(el("forecastPanel").classList.contains("open")&&weatherCache[c.name]){
+drawForecast(c.name);
 }
 });
-return;
+}else drawForecast(c.name);
+el("forecastPanel").classList.add("open");
+wake();
 }
 
+function drawForecast(name){
+var cached=weatherCache[name];
+if(!cached)return;
 var d=cached.data.daily;
-byId("forecast").innerHTML=d.time.map(function(date,i){
-var day=new Date(date+"T12:00:00Z");
-var label=day.toLocaleDateString("en-GB",{
+el("forecast").innerHTML=d.time.map(function(date,i){
+var label=new Date(date+"T12:00:00Z").toLocaleDateString("en-GB",{
 weekday:"short",timeZone:"UTC"
 });
 return '<div class="day">'+label+
-'<strong>'+Math.round(d.temperature_2m_max[i])+"°</strong>"+
-Math.round(d.temperature_2m_min[i])+"°"+
+'<strong>'+Math.round(d.temperature_2m_max[i])+'°</strong>'+
+Math.round(d.temperature_2m_min[i])+'°'+
 '<div style="margin-top:8px">'+
-(conditions[d.weather_code[i]]||"Weather")+
-"</div></div>";
+(conditions[d.weather_code[i]]||"Weather")+'</div></div>';
 }).join("");
-
-byId("forecastPanel").classList.add("open");
 }
 
 function startScreensaver(){
-if(!byId("screenOn").checked)return;
+if(!el("screenOn").checked)return;
 closePanels();
+idle=true;
 document.body.classList.add("idle");
-byId("screensaver").classList.add("show");
+el("screensaver").classList.add("show");
 }
 
 function wake(){
+idle=false;
 document.body.classList.remove("idle");
-byId("screensaver").classList.remove("show");
+el("screensaver").classList.remove("show");
 clearTimeout(idleTimer);
+if(el("screenOn").checked){
 idleTimer=setTimeout(function(){
-if(!byId("forecastPanel").classList.contains("open")&&
-!byId("settingsPanel").classList.contains("open")){
+if(!el("forecastPanel").classList.contains("open")&&
+!el("settingsPanel").classList.contains("open")){
 startScreensaver();
 }
 },180000);
 }
+}
 
-document.addEventListener("pointerdown",function(){
-if(document.body.classList.contains("idle")){
+document.addEventListener("pointerdown",function(e){
+if(idle){
 wake();
-}
-else{
-clearTimeout(idleTimer);
-idleTimer=setTimeout(startScreensaver,180000);
-}
-});
+e.preventDefault();
+}else wake();
+},true);
 
 document.addEventListener("keydown",function(e){
-if(document.body.classList.contains("idle")){
+if(idle){wake();e.preventDefault();return;}
 wake();
-e.preventDefault();
-return;
-}
-wake();
-
 if(e.key==="Escape"||e.key==="Backspace"){
-closePanels();
-return;
+closePanels();return;
 }
+if(el("forecastPanel").classList.contains("open")||
+el("settingsPanel").classList.contains("open"))return;
 
-if(byId("settingsPanel").classList.contains("open")||
-byId("forecastPanel").classList.contains("open"))return;
-
-var buttons=Array.from(document.querySelectorAll(
-".cities button,.dock button,nav button"
-));
+var buttons=Array.from(document.querySelectorAll(".cities button,.dock button,nav button"));
 var index=buttons.indexOf(document.activeElement);
 var direction=0;
-if(e.key==="ArrowRight")direction=1;
-if(e.key==="ArrowLeft")direction=-1;
-if(e.key==="ArrowDown")direction=1;
-if(e.key==="ArrowUp")direction=-1;
-
+if(e.key==="ArrowRight"||e.key==="ArrowDown")direction=1;
+if(e.key==="ArrowLeft"||e.key==="ArrowUp")direction=-1;
 if(direction){
-if(index<0)index=0;
-else index=(index+direction+buttons.length)%buttons.length;
-buttons[index].focus();
-e.preventDefault();
+index=index<0?0:(index+direction+buttons.length)%buttons.length;
+buttons[index].focus();e.preventDefault();
 }
 if(e.key==="Enter"&&document.activeElement.tagName==="BUTTON"){
 document.activeElement.click();
@@ -493,7 +559,6 @@ renderApps();
 renderNav();
 render();
 restartRotation();
-clock();
 setInterval(clock,30000);
 wake();
 </script>
