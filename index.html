@@ -3,188 +3,87 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080d18">
-<title>The Jouadis TV — Version 6</title>
+<title>The Jouadis TV — Version 7</title>
 <style>
 :root{
-  --glass:rgba(13,21,36,.65);
-  --border:rgba(255,255,255,.25);
+ --glass:rgba(12,23,43,.65);
+ --border:rgba(255,255,255,.26);
+ --accent:#b9ddff;
 }
 *{box-sizing:border-box}
-html,body{
-  margin:0;width:100%;height:100%;
-  background:#080d18;color:white;
-  font-family:-apple-system,BlinkMacSystemFont,
-  "Segoe UI",Arial,sans-serif;
-}
+html,body{margin:0;width:100%;height:100%;background:#080d18;color:white;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
 body{overflow:hidden}
-button,select,input{font:inherit}
-button{cursor:pointer;color:white;-webkit-tap-highlight-color:transparent}
-button:focus-visible,select:focus-visible{
-  outline:3px solid white;outline-offset:3px;
-}
+button{font:inherit;color:white;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible{outline:3px solid white;outline-offset:3px}
 #bg,#shade{position:fixed;inset:0;pointer-events:none}
-#bg{
-  background-position:center;background-size:cover;
-  z-index:0;transform:scale(1.03);
-  transition:opacity .65s ease,transform 12s linear;
-}
-#shade{
-  z-index:1;
-  background:linear-gradient(90deg,rgba(2,7,18,.86),rgba(2,7,18,.13) 85%),
-  linear-gradient(0deg,rgba(2,7,18,.85),transparent 75%);
-}
-main{
-  position:relative;z-index:2;
-  height:100vh;height:100dvh;
-  display:flex;flex-direction:column;
-  justify-content:space-between;
-  gap:8px;
-  padding:clamp(12px,2.2vh,26px) 4vw;
-  padding-bottom:max(12px,env(safe-area-inset-bottom));
-}
-header{display:flex;justify-content:space-between;align-items:flex-start}
-.brand{
-  font:italic clamp(24px,3.1vw,48px) Georgia,serif;
-  letter-spacing:-1px;
-}
-.subtitle{font-size:clamp(10px,1.1vw,14px);color:#ddd;margin-top:5px}
-.clock{text-align:right;font-size:clamp(22px,2.8vw,40px);font-weight:300}
-#date{font-size:12px;color:#ddd;margin-top:4px}
-.weather{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
-.weather h1{
-  font-size:clamp(34px,4.7vw,72px);
-  font-weight:450;margin:0 0 4px;
-}
-.temp{
-  font-size:clamp(64px,8.5vw,125px);
-  font-weight:200;line-height:1.05;
-  letter-spacing:-4px;
-}
-#condition{font-size:clamp(14px,1.8vw,22px)}
-#highlow,#landmark{font-size:clamp(11px,1.15vw,15px);color:#e2e6ec;margin-top:7px}
-.cities{
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:10px;
-}
-.city{
-  min-width:0;height:clamp(55px,9vh,100px);
-  background-color:#1b293c;
-  background-size:cover;background-position:center;
-  border:1px solid rgba(255,255,255,.45);
-  border-radius:14px;
-  font-size:clamp(11px,1.3vw,17px);
-  font-weight:600;text-shadow:0 2px 8px black;
-}
-.city.active{
-  border:2px solid white;
-  box-shadow:0 0 14px #ffffff55;
-}
-.dock{
-  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));
-  gap:9px;
-  padding:10px;
-  border-radius:24px;
-  border:1px solid var(--border);
-  background:var(--glass);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-}
-.app{
-  min-width:0;height:clamp(56px,9vh,95px);
-  display:flex;align-items:center;justify-content:center;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(18,29,48,.8);
-  transition:transform .2s,background .2s;
-}
-.app:hover,.app:focus{
-  transform:scale(1.06);
-  background:rgba(46,64,90,.9);
-}
-.app svg{width:56%;height:56%;max-width:70px;max-height:65px}
-.app .wordmark{font-weight:800;font-size:clamp(13px,1.7vw,24px)}
-nav{
-  display:flex;justify-content:space-around;
-  gap:4px;padding:5px;
-  border-radius:17px;
-  background:rgba(12,21,36,.72);
-  border:1px solid rgba(255,255,255,.13);
-}
-nav button{
-  flex:1;min-width:0;border:0;
-  background:transparent;border-radius:11px;
-  padding:9px 3px;
-  font-size:clamp(10px,1.2vw,15px);
-}
-nav button.active{background:rgba(255,255,255,.2)}
-.panel{
-  position:fixed;z-index:20;
-  top:5%;right:4%;width:min(470px,92vw);
-  max-height:88vh;overflow:auto;
-  padding:24px;border-radius:24px;
-  border:1px solid rgba(255,255,255,.3);
-  background:rgba(12,23,41,.97);
-  box-shadow:0 20px 65px #0009;
-  display:none;
-}
-.panel.open{display:block}
-.panel h2{font-weight:400;margin:0 0 20px}
-.panel button,.panel select{
-  padding:10px;border-radius:11px;
-  background:#ffffff1b;
-  border:1px solid #ffffff50;color:white;
-}
-.panel select option{color:black}
-.panel label{display:block;margin:17px 0}
-.panel input{margin-right:8px}
-.close{float:right}
-.forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.day{
-  text-align:center;background:#ffffff12;
-  padding:12px 4px;border-radius:12px;font-size:12px;
-}
-.day strong{display:block;font-size:20px;margin:10px 0}
-#toast{
-  position:fixed;z-index:30;
-  left:50%;bottom:12%;transform:translateX(-50%);
-  background:#14233beF;border:1px solid #ffffff50;
-  padding:14px 20px;border-radius:14px;
-  text-align:center;display:none;max-width:90vw;
-}
-#screensaver{
-  position:fixed;z-index:10;inset:0;
-  display:none;align-items:flex-end;
-  justify-content:space-between;
-  padding:5vw;pointer-events:none;
-  background:linear-gradient(0deg,#0009,transparent 60%);
-}
+#bg{z-index:0;background:linear-gradient(120deg,#17385c,#07101d);background-size:cover;background-position:center;transition:opacity .7s ease,transform 12s linear;transform:scale(1.03)}
+#shade{z-index:1;background:linear-gradient(90deg,rgba(3,10,24,.83),rgba(3,10,24,.18) 85%),linear-gradient(0deg,rgba(3,8,20,.83),transparent 55%)}
+main{position:relative;z-index:2;width:100%;height:100dvh;min-height:400px;padding:clamp(18px,3vw,42px);display:flex;flex-direction:column;justify-content:space-between}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.brand{font-family:Georgia,serif;font-style:italic;font-size:clamp(24px,3vw,43px);text-shadow:0 2px 12px #000}
+.tagline{font-size:11px;opacity:.85;margin-top:4px}
+.clock{text-align:right;font-size:clamp(21px,2.5vw,35px);font-weight:300}
+.date{font-size:11px;opacity:.75;margin-top:4px}
+.hero{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-height:0;padding:15px 0}
+.cityname{font-size:clamp(35px,5vw,67px);font-weight:650;letter-spacing:-2px}
+.temp{font-size:clamp(65px,9vw,118px);font-weight:250;line-height:1.15;margin:8px 0}
+.condition{font-size:clamp(14px,1.5vw,20px);font-weight:500}
+.highlow,.landmark{font-size:12px;margin-top:12px;opacity:.85}
+.bottom{display:flex;flex-direction:column;gap:clamp(9px,1.5vh,16px)}
+.cities{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.citycard{height:clamp(53px,8vh,90px);border:2px solid var(--border);border-radius:15px;background-size:cover;background-position:center;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:clamp(10px,1.2vw,15px);font-weight:650;text-shadow:0 2px 6px black;transition:transform .2s,border-color .2s}
+.citycard:before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.32)}
+.citycard span{position:relative;z-index:1}
+.citycard.active{border-color:white;box-shadow:0 0 0 2px rgba(255,255,255,.25),0 0 20px rgba(130,210,255,.35)}
+.citycard:active{transform:scale(.97)}
+.dock{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;padding:8px;background:var(--glass);border:1px solid var(--border);border-radius:22px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 12px 35px rgba(0,0,0,.28)}
+.app{height:clamp(51px,8vh,83px);background:rgba(13,32,65,.6);border:1px solid rgba(255,255,255,.3);border-radius:15px;display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s}
+.app:hover{transform:translateY(-4px);background:rgba(45,77,120,.75)}
+.app svg{width:clamp(24px,3vw,42px);height:clamp(24px,3vw,42px)}
+.app img{width:clamp(27px,3.4vw,43px);height:clamp(27px,3.4vw,43px);object-fit:contain}
+.nav{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:rgba(12,32,65,.77);padding:6px;border-radius:18px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.nav button{border:0;background:transparent;border-radius:11px;font-size:clamp(10px,1.1vw,14px);padding:10px 3px;white-space:nowrap}
+.nav button.selected{background:rgba(143,194,247,.48)}
+.panel{position:fixed;z-index:8;inset:0;background:rgba(0,5,17,.65);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.panel.open{display:flex}
+.panelbox{width:min(750px,100%);max-height:85dvh;overflow:auto;background:rgba(14,27,48,.96);border:1px solid var(--border);border-radius:25px;padding:25px;box-shadow:0 20px 70px #0008}
+.panelhead{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.panelhead h2{margin:0;font-size:25px}
+.close{border:1px solid var(--border);border-radius:50%;background:#304260;width:40px;height:40px;font-size:22px}
+.forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:20px}
+.day{background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:16px;text-align:center;padding:17px 6px}
+.day .emoji{font-size:29px;margin:15px 0}
+.day .degrees{font-size:15px}
+.setting{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+.setting select,.setting button{background:#253c5b;color:white;border:1px solid var(--border);border-radius:12px;padding:10px}
+.setting input{accent-color:#9ccfff;max-width:140px}
+#screensaver{position:fixed;inset:0;z-index:12;display:none;align-items:flex-end;justify-content:space-between;padding:7vw;background:linear-gradient(0deg,#06101dc9,transparent 70%);cursor:pointer}
 #screensaver.show{display:flex}
-#screensaver .large{font-size:clamp(32px,5vw,72px);font-weight:300}
-body.idle main,body.idle #shade{opacity:0;pointer-events:none}
-main,#shade{transition:opacity .8s}
-@media(max-width:650px){
-  main{padding:12px;gap:6px}
-  .cities{gap:5px}
-  .city{height:55px;font-size:10px}
-  .dock{gap:5px;padding:6px;border-radius:16px}
-  .app{height:57px;border-radius:11px}
-  nav button{font-size:9px;padding:7px 2px}
-  .weather h1{font-size:32px}
-  .temp{font-size:64px}
-  .forecast{grid-template-columns:repeat(5,1fr)}
+.savecity{font-size:clamp(36px,6vw,90px);font-weight:650}
+.saveclock{font-size:clamp(55px,9vw,130px);font-weight:200}
+#toast{position:fixed;z-index:20;left:50%;bottom:25px;transform:translateX(-50%);padding:12px 22px;background:#273e5c;border:1px solid white;border-radius:16px;display:none;text-align:center}
+@media(max-width:600px){
+ main{padding:15px}
+ .brand{font-size:24px}
+ .hero{justify-content:center}
+ .dock{gap:3px;padding:5px;border-radius:14px}
+ .app{border-radius:10px}
+ .nav button{font-size:10px}
+ .forecast{gap:4px}
+ .day{padding:12px 2px;font-size:11px}
+ .panelbox{padding:15px}
 }
-@media(max-height:550px){
-  main{gap:4px;padding-top:8px;padding-bottom:8px}
-  .city{height:50px}
-  .app{height:53px}
-  .weather h1{font-size:32px}
-  .temp{font-size:58px}
-  #landmark,#highlow{margin-top:3px}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*:before,*:after{scroll-behavior:auto!important}
+@media(max-height:650px){
+ .hero{padding:5px 0}
+ .cityname{font-size:35px}
+ .temp{font-size:65px;margin:0}
+ .highlow,.landmark{margin-top:5px}
+ .bottom{gap:6px}
+ .citycard{height:51px}
+ .app{height:48px}
+ .nav button{padding:6px 2px}
 }
 </style>
 </head>
@@ -197,370 +96,447 @@ main,#shade{transition:opacity .8s}
 <header>
 <div>
 <div class="brand">✦ The Jouadis TV</div>
-<div class="subtitle">Your Family Entertainment</div>
+<div class="tagline">Your Family Entertainment</div>
 </div>
-<div class="clock">
-<div id="time">--:--</div>
-<div id="date"></div>
+<div>
+<div class="clock" id="clock">--:--</div>
+<div class="date" id="date"></div>
 </div>
 </header>
 
-<section class="weather">
-<h1 id="cityName">Casablanca</h1>
+<section class="hero">
+<div class="cityname" id="cityname">Casablanca</div>
 <div class="temp" id="temp">--°C</div>
-<div id="condition">Loading weather...</div>
-<div id="highlow"></div>
-<div id="landmark"></div>
+<div class="condition" id="condition">Loading weather...</div>
+<div class="highlow" id="highlow"></div>
+<div class="landmark" id="landmark"></div>
 </section>
 
-<section class="cities" id="cities"></section>
-<section class="dock" id="dock"></section>
-<nav id="nav"></nav>
+<div class="bottom">
+<div class="cities" id="cities"></div>
+
+<div class="dock">
+<button class="app" title="Netflix" onclick="launch('netflix')">
+<svg viewBox="0 0 50 50"><path fill="#e50914" d="M10 5h9l21 35V5h-9v40h-9L10 10v35h9V5z"/></svg>
+</button>
+<button class="app" title="YouTube" onclick="launch('youtube')">
+<svg viewBox="0 0 48 48"><rect x="3" y="10" width="42" height="28" rx="9" fill="#ff0033"/><path d="M20 17l13 7-13 7z" fill="white"/></svg>
+</button>
+<button class="app" title="Prime Video" onclick="launch('prime')">
+<img src="https://cdn.simpleicons.org/amazonprime/00A8E1" alt="Prime Video" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+<span style="display:none;color:#00a8e1;font-weight:bold;font-size:25px">prime</span>
+</button>
+<button class="app" title="Apple TV" onclick="launch('apple')">
+<svg viewBox="0 0 70 42"><path fill="white" d="M16 12c-2-3-1-6 3-8 1 4-1 7-3 8zm1 2c3-2 5-1 7 0-4 4-3 10 1 12-2 5-4 9-7 9-2 0-3-1-5-1s-3 1-5 1C3 30 0 22 3 16c3-5 7-5 10-3 1 1 3 1 4 1z"/><text x="29" y="30" fill="white" font-size="23" font-weight="bold">tv</text></svg>
+</button>
+<button class="app" title="Disney+" onclick="launch('disney')">
+<svg viewBox="0 0 70 45"><path d="M6 18Q35-7 64 18" fill="none" stroke="#8dcaff" stroke-width="2.5"/><text x="8" y="33" fill="white" font-size="23" font-family="Georgia" font-style="italic">D+</text></svg>
+</button>
+<button class="app" title="Spotify" onclick="launch('spotify')">
+<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#1ed760"/><path d="M11 18Q24 13 38 20M13 25Q25 21 36 27M15 32Q25 29 34 34" fill="none" stroke="#10251b" stroke-width="3.5" stroke-linecap="round"/></svg>
+</button>
+<button class="app" title="Shahid" onclick="launch('shahid')">
+<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#6638ed"/><path d="M19 13l17 11-17 11z" fill="white"/></svg>
+</button>
+</div>
+
+<nav class="nav">
+<button class="selected" onclick="navigate('Home',this)">⌂ Home</button>
+<button onclick="navigate('Movies',this)">▣ Movies</button>
+<button onclick="navigate('Series',this)">▤ Series</button>
+<button onclick="navigate('Live TV',this)">◉ Live TV</button>
+<button onclick="navigate('Music',this)">♫ Music</button>
+<button onclick="navigate('Weather',this)">☁ Weather</button>
+<button onclick="navigate('Settings',this)">⚙ Settings</button>
+</nav>
+</div>
 </main>
 
-<section class="panel" id="forecastPanel">
-<button class="close" onclick="closePanels()">✕</button>
-<h2 id="forecastTitle">Five-day forecast</h2>
-<div class="forecast" id="forecast"></div>
-<p style="color:#b8c5d5;font-size:12px">Weather data: Open-Meteo</p>
-</section>
+<div class="panel" id="panel" onclick="if(event.target===this)closePanel()">
+<div class="panelbox">
+<div class="panelhead">
+<h2 id="paneltitle">Weather</h2>
+<button class="close" onclick="closePanel()">×</button>
+</div>
+<div id="panelcontent"></div>
+</div>
+</div>
 
-<section class="panel" id="settingsPanel">
-<button class="close" onclick="closePanels()">✕</button>
-<h2>Quick Settings</h2>
-<label>City
-<select id="citySelect" onchange="selectCity(Number(this.value))">
-<option value="0">Casablanca</option>
-<option value="1">Newcastle</option>
-<option value="2">London</option>
-<option value="3">Manchester</option>
-</select>
-</label>
-<label><input type="checkbox" id="autoSwitch" checked onchange="restartRotation()">Automatic city switching — 12 seconds</label>
-<label><input type="checkbox" id="screenOn" checked onchange="wake()">Enable cinematic screensaver</label>
-<label><input type="checkbox" id="motionOn" checked onchange="renderBackground()">Enable cinematic zoom</label>
-<button onclick="startScreensaver()">Preview screensaver</button>
-<button onclick="closePanels()">Done</button>
-</section>
-
-<div id="screensaver">
+<div id="screensaver" onclick="exitScreensaver()">
 <div>
-<div class="large" id="saveCity"></div>
-<div id="saveWeather"></div>
+<div class="savecity" id="savecity"></div>
+<div id="saveweather"></div>
 </div>
-<div class="large" id="saveClock"></div>
+<div class="saveclock" id="saveclock"></div>
 </div>
-
 <div id="toast" role="status"></div>
 
 <script>
 "use strict";
 
-var cities=[
-{
-name:"Casablanca",lat:33.5731,lon:-7.5898,
-zone:"Africa/Casablanca",landmark:"Hassan II Mosque",
-photo:"https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=1600"
-},
-{
-name:"Newcastle",lat:54.9783,lon:-1.6178,
-zone:"Europe/London",landmark:"Tyne Bridge",
-photo:"https://images.unsplash.com/photo-1565591368202-3e8b11d3f9b8?w=1600"
-},
-{
-name:"London",lat:51.5074,lon:-0.1278,
-zone:"Europe/London",landmark:"Big Ben",
-photo:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600"
-},
-{
-name:"Manchester",lat:53.4808,lon:-2.2426,
-zone:"Europe/London",landmark:"Manchester city centre",
-photo:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1600"
-}
+const cities=[
+ {name:"Casablanca",lat:33.5731,lon:-7.5898,zone:"Africa/Casablanca",landmark:"Hassan II Mosque",photo:"images/casablanca.jpg"},
+ {name:"Newcastle",lat:54.9783,lon:-1.6178,zone:"Europe/London",landmark:"Tyne Bridge",photo:"images/newcastle.jpg"},
+ {name:"London",lat:51.5074,lon:-0.1278,zone:"Europe/London",landmark:"Big Ben",photo:"images/london.jpg"},
+ {name:"Manchester",lat:53.4808,lon:-2.2426,zone:"Europe/London",landmark:"Manchester Town Hall",photo:"images/manchester.jpg"}
 ];
 
-var conditions={
-0:"Clear sky",1:"Mainly clear",2:"Partly cloudy",
-3:"Cloudy",45:"Foggy",48:"Foggy",
-51:"Light drizzle",53:"Drizzle",55:"Heavy drizzle",
-61:"Light rain",63:"Rain",65:"Heavy rain",
-71:"Light snow",73:"Snow",75:"Heavy snow",
-80:"Rain showers",81:"Rain showers",82:"Heavy showers",
-95:"Thunderstorms",96:"Thunderstorms",99:"Thunderstorms"
+const appUrls={
+ netflix:"https://www.netflix.com/",
+ youtube:"https://www.youtube.com/",
+ prime:"https://www.primevideo.com/",
+ apple:"https://tv.apple.com/",
+ disney:"https://www.disneyplus.com/",
+ spotify:"https://open.spotify.com/",
+ shahid:"https://shahid.mbc.net/"
 };
 
-var current=0;
-var weatherCache={};
-var rotationTimer,idleTimer,toastTimer,bgTimer;
-var idle=false;
-var requestNumber=0;
+const weatherDescriptions={
+ 0:"Clear sky",1:"Mainly clear",2:"Partly cloudy",3:"Cloudy",
+ 45:"Foggy",48:"Foggy",51:"Light drizzle",53:"Drizzle",55:"Drizzle",
+ 61:"Light rain",63:"Rain",65:"Heavy rain",71:"Light snow",
+ 73:"Snow",75:"Heavy snow",80:"Rain showers",81:"Rain showers",
+ 82:"Heavy showers",95:"Thunderstorm",96:"Thunderstorm",99:"Thunderstorm"
+};
 
-function el(id){return document.getElementById(id)}
-
-function iconNetflix(){
-return '<svg viewBox="0 0 64 64"><path fill="#E50914" d="M13 5h12l26 46V5h-12v54L13 14z"/><path fill="#B1060E" d="M13 5h12v54H13z"/><path fill="#E50914" d="M39 5h12v54H39z"/></svg>';
-}
-function iconYouTube(){
-return '<svg viewBox="0 0 64 64"><rect x="5" y="15" width="54" height="34" rx="11" fill="#FF0033"/><path d="M27 23L43 32 27 41z" fill="white"/></svg>';
-}
-function iconPrime(){
-return '<svg viewBox="0 0 64 64"><rect x="4" y="4" width="56" height="56" rx="15" fill="#00A8E1"/><path d="M14 39Q32 51 50 37" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/><path d="M43 35l8 1-4 7" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/><text x="32" y="31" text-anchor="middle" fill="white" font-family="Arial" font-size="19" font-weight="bold">prime</text></svg>';
-}
-function iconApple(){
-return '<svg viewBox="0 0 64 64"><text x="32" y="40" fill="white" text-anchor="middle" font-size="27" font-family="Arial" font-weight="bold">tv</text><circle cx="14" cy="31" r="7" fill="white"/><path d="M14 23Q15 17 20 18" stroke="white" stroke-width="3" fill="none"/></svg>';
-}
-function iconDisney(){
-return '<svg viewBox="0 0 64 64"><path d="M9 30Q31 4 56 28" fill="none" stroke="#88B9FF" stroke-width="3" stroke-linecap="round"/><text x="30" y="43" text-anchor="middle" fill="white" font-family="Georgia" font-style="italic" font-size="29">D</text><path d="M48 36h12M54 30v12" stroke="white" stroke-width="3"/></svg>';
-}
-function iconSpotify(){
-return '<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="#1ED760"/><path d="M16 25Q32 19 49 28M18 33Q32 28 46 36M21 40Q32 36 43 43" fill="none" stroke="#092314" stroke-width="4" stroke-linecap="round"/></svg>';
-}
-function iconShahid(){
-return '<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="25" fill="#7428E8"/><path d="M24 18L46 32 24 46z" fill="white"/></svg>';
-}
-
-var apps=[
-{name:"Netflix",icon:iconNetflix()},
-{name:"YouTube",icon:iconYouTube()},
-{name:"Prime Video",icon:iconPrime()},
-{name:"Apple TV",icon:iconApple()},
-{name:"Disney+",icon:iconDisney()},
-{name:"Spotify",icon:iconSpotify()},
-{name:"Shahid",icon:iconShahid()}
-];
-
-var sections=["⌂ Home","▣ Movies","▣ Series","◉ Live TV","♫ Music","☁ Weather","⚙ Settings"];
+let current=0;
+let autoTimer=null;
+let saverTimer=null;
+let saverInterval=null;
+let clockTimer=null;
+let requestNumber=0;
+let lastActivity=Date.now();
+let weatherCache={};
+let settings={auto:true,saver:true,interval:12,idle:120,brightness:100};
+const el=id=>document.getElementById(id);
 
 function toast(message){
-el("toast").textContent=message;
-el("toast").style.display="block";
-clearTimeout(toastTimer);
-toastTimer=setTimeout(function(){el("toast").style.display="none"},3000);
+ el("toast").textContent=message;
+ el("toast").style.display="block";
+ clearTimeout(toast.timer);
+ toast.timer=setTimeout(()=>el("toast").style.display="none",3000);
 }
 
-function clock(){
-var now=new Date(),zone=cities[current].zone;
-var time=now.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:zone});
-el("time").textContent=time;
-el("saveClock").textContent=time;
-el("date").textContent=now.toLocaleDateString("en-GB",{
-weekday:"long",day:"numeric",month:"short",year:"numeric",timeZone:zone
-});
+function fallbackPhoto(city){
+ const gradients=[
+ "linear-gradient(125deg,#af8155,#354967,#08111d)",
+ "linear-gradient(125deg,#4c7893,#25405d,#091424)",
+ "linear-gradient(125deg,#52698b,#28395d,#0b1020)",
+ "linear-gradient(125deg,#57356f,#1b2c61,#071126)"
+ ];
+ return gradients[city]||gradients[0];
 }
 
-function renderBackground(){
-var bg=el("bg"),photo=cities[current].photo;
-clearTimeout(bgTimer);
-bg.style.opacity=".3";
-bgTimer=setTimeout(function(){
-bg.style.transition="none";
-bg.style.backgroundImage='url("'+photo+'")';
-bg.style.transform="scale(1.02)";
-bg.offsetHeight;
-bg.style.transition="opacity .7s,transform 12s linear";
-bg.style.opacity="1";
-if(el("motionOn").checked)bg.style.transform="scale(1.12)";
-},220);
+function photoUrl(city){
+ return cities[city].photo;
+}
+
+function setBackground(index){
+ const url=photoUrl(index);
+ const bg=el("bg");
+ bg.style.backgroundImage=fallbackPhoto(index);
+ bg.style.transform="scale(1.03)";
+ const image=new Image();
+ image.onload=()=>{
+  if(current!==index)return;
+  bg.style.backgroundImage=`linear-gradient(rgba(5,12,25,.08),rgba(5,12,25,.08)),url("${url}")`;
+  requestAnimationFrame(()=>bg.style.transform="scale(1.10)");
+ };
+ image.onerror=()=>{
+  if(current===index)toast("City image unavailable — check images folder");
+ };
+ image.src=url;
 }
 
 function renderCities(){
-el("cities").innerHTML=cities.map(function(c,i){
-return '<button class="city '+(i===current?"active":"")+
-'" data-city="'+i+'" style="background-image:linear-gradient(0deg,#000a,transparent),url(\''+
-c.photo+'\')">'+c.name+'</button>';
-}).join("");
-document.querySelectorAll("[data-city]").forEach(function(b){
-b.onclick=function(){selectCity(Number(b.getAttribute("data-city")))};
-});
+ el("cities").innerHTML="";
+ cities.forEach((c,i)=>{
+  const b=document.createElement("button");
+  b.className="citycard"+(i===current?" active":"");
+  b.style.backgroundImage=fallbackPhoto(i);
+  const im=new Image();
+  im.onload=()=>b.style.backgroundImage=`linear-gradient(#0002,#0003),url("${c.photo}")`;
+  im.src=c.photo;
+  const s=document.createElement("span");
+  s.textContent=c.name;
+  b.appendChild(s);
+  b.onclick=()=>selectCity(i,true);
+  el("cities").appendChild(b);
+ });
 }
 
-function renderApps(){
-el("dock").innerHTML=apps.map(function(a,i){
-return '<button class="app" data-app="'+i+'" aria-label="'+a.name+'" title="'+a.name+'">'+a.icon+'</button>';
-}).join("");
-document.querySelectorAll("[data-app]").forEach(function(b){
-b.onclick=function(){
-toast(apps[Number(b.getAttribute("data-app"))].name+" — demonstration shortcut");
-};
-});
+function selectCity(index,manual=false){
+ current=index;
+ requestNumber++;
+ const c=cities[index];
+ el("cityname").textContent=c.name;
+ el("landmark").textContent=c.landmark;
+ el("savecity").textContent=c.name;
+ el("temp").textContent="--°C";
+ el("condition").textContent="Loading weather...";
+ el("highlow").textContent="";
+ setBackground(index);
+ renderCities();
+ updateClock();
+ loadWeather();
+ if(manual){
+  activity();
+  resetRotation();
+ }
 }
 
-function renderNav(){
-el("nav").innerHTML=sections.map(function(s,i){
-return '<button data-nav="'+i+'" class="'+(i===0?"active":"")+'">'+s+'</button>';
-}).join("");
-document.querySelectorAll("[data-nav]").forEach(function(b){
-b.onclick=function(){
-var n=Number(b.getAttribute("data-nav"));
-if(n===5)openForecast();
-else if(n===6)openSettings();
-else if(n===0)closePanels();
-else toast(sections[n]+" — coming soon");
-};
-});
+function resetRotation(){
+ clearInterval(autoTimer);
+ if(settings.auto){
+  autoTimer=setInterval(()=>{
+   if(!el("panel").classList.contains("open")&&!el("screensaver").classList.contains("show")){
+    selectCity((current+1)%cities.length);
+   }
+  },settings.interval*1000);
+ }
+}
+
+function updateClock(){
+ const now=new Date();
+ const zone=cities[current].zone;
+ el("clock").textContent=new Intl.DateTimeFormat("en-GB",{
+  timeZone:zone,hour:"2-digit",minute:"2-digit",hour12:false
+ }).format(now);
+ el("date").textContent=new Intl.DateTimeFormat("en-GB",{
+  timeZone:zone,weekday:"long",day:"numeric",month:"short",year:"numeric"
+ }).format(now);
+ el("saveclock").textContent=el("clock").textContent;
+}
+
+function weatherEmoji(code){
+ if(code===0||code===1)return"☀️";
+ if(code===2||code===3)return"☁️";
+ if(code===45||code===48)return"🌫️";
+ if(code>=51&&code<=82)return"🌧️";
+ if(code>=95)return"⛈️";
+ return"🌤️";
 }
 
 function showWeather(data){
-var t=Math.round(data.current.temperature_2m);
-el("temp").textContent=t+"°C";
-el("condition").textContent=conditions[data.current.weather_code]||"Current conditions";
-el("highlow").textContent="H: "+Math.round(data.daily.temperature_2m_max[0])+
-"°   L: "+Math.round(data.daily.temperature_2m_min[0])+"°";
-el("saveWeather").textContent=t+"°C · "+el("condition").textContent;
+ const t=Math.round(data.current.temperature_2m);
+ const code=data.current.weather_code;
+ const condition=weatherDescriptions[code]||"Weather";
+ el("temp").textContent=t+"°C";
+ el("condition").textContent=condition;
+ el("highlow").textContent=
+ "H: "+Math.round(data.daily.temperature_2m_max[0])+
+ "°  L: "+Math.round(data.daily.temperature_2m_min[0])+"°";
+ el("saveweather").textContent=t+"°C · "+condition;
+ if(el("panel").classList.contains("open")&&el("paneltitle").textContent==="5-Day Forecast"){
+  renderForecast();
+ }
 }
 
 async function loadWeather(){
-var c=cities[current],key=c.name,token=++requestNumber;
-var cached=weatherCache[key];
-if(cached&&Date.now()-cached.at<600000){
-showWeather(cached.data);return;
-}
-el("temp").textContent="--°C";
-el("condition").textContent="Loading weather...";
-el("highlow").textContent="";
-el("saveWeather").textContent="Loading weather...";
-try{
-var url="https://api.open-meteo.com/v1/forecast?latitude="+c.lat+
-"&longitude="+c.lon+
-"&current=temperature_2m,weather_code"+
-"&daily=weather_code,temperature_2m_max,temperature_2m_min"+
-"&timezone=auto&forecast_days=5";
-var r=await fetch(url);
-if(!r.ok)throw Error("Weather request failed");
-var data=await r.json();
-weatherCache[key]={data:data,at:Date.now()};
-if(token===requestNumber)showWeather(data);
-}catch(e){
-if(token===requestNumber){
-el("condition").textContent="Weather temporarily unavailable";
-el("saveWeather").textContent="Weather unavailable";
-}
-}
+ const c=cities[current];
+ const token=requestNumber;
+ const cached=weatherCache[c.name];
+ if(cached&&Date.now()-cached.time<600000){
+  showWeather(cached.data);
+  return;
+ }
+ try{
+  const url="https://api.open-meteo.com/v1/forecast?latitude="+c.lat+
+  "&longitude="+c.lon+
+  "&current=temperature_2m,weather_code"+
+  "&daily=weather_code,temperature_2m_max,temperature_2m_min"+
+  "&timezone="+encodeURIComponent(c.zone)+
+  "&forecast_days=5";
+  const response=await fetch(url);
+  if(!response.ok)throw new Error("Weather request failed");
+  const data=await response.json();
+  weatherCache[c.name]={data,time:Date.now()};
+  if(token===requestNumber)showWeather(data);
+ }catch(error){
+  if(token!==requestNumber)return;
+  el("condition").textContent="Weather unavailable";
+  el("saveweather").textContent="Weather unavailable";
+ }
 }
 
-function render(){
-var c=cities[current];
-el("cityName").textContent=c.name;
-el("saveCity").textContent=c.name;
-el("landmark").textContent=c.landmark;
-el("citySelect").value=String(current);
-renderBackground();renderCities();clock();loadWeather();
+function renderForecast(){
+ const c=cities[current];
+ const entry=weatherCache[c.name];
+ const root=el("panelcontent");
+ root.innerHTML="";
+ const subtitle=document.createElement("p");
+ subtitle.textContent=c.name+" · Local forecast";
+ root.appendChild(subtitle);
+ if(!entry){
+  const p=document.createElement("p");
+  p.textContent="Loading forecast...";
+  root.appendChild(p);
+  return;
+ }
+ const data=entry.data.daily;
+ const grid=document.createElement("div");
+ grid.className="forecast";
+ for(let i=0;i<Math.min(5,data.time.length);i++){
+  const date=new Date(data.time[i]+"T12:00:00Z");
+  const day=document.createElement("div");
+  day.className="day";
+  const name=document.createElement("div");
+  name.textContent=new Intl.DateTimeFormat("en-GB",{weekday:"short",timeZone:"UTC"}).format(date);
+  const emoji=document.createElement("div");
+  emoji.className="emoji";
+  emoji.textContent=weatherEmoji(data.weather_code[i]);
+  const degrees=document.createElement("div");
+  degrees.className="degrees";
+  degrees.textContent=Math.round(data.temperature_2m_max[i])+"° / "+Math.round(data.temperature_2m_min[i])+"°";
+  day.append(name,emoji,degrees);
+  grid.appendChild(day);
+ }
+ root.appendChild(grid);
 }
 
-function nextCity(){current=(current+1)%cities.length;render()}
-
-function restartRotation(){
-clearInterval(rotationTimer);
-if(el("autoSwitch").checked)rotationTimer=setInterval(nextCity,12000);
+function openPanel(title){
+ el("paneltitle").textContent=title;
+ el("panel").classList.add("open");
+ activity();
+}
+function closePanel(){
+ el("panel").classList.remove("open");
+ activity();
+}
+function weatherPanel(){
+ openPanel("5-Day Forecast");
+ renderForecast();
 }
 
-function selectCity(i){
-current=Math.max(0,Math.min(cities.length-1,i));
-render();restartRotation();
+function settingRow(label,control){
+ const row=document.createElement("div");
+ row.className="setting";
+ const text=document.createElement("span");
+ text.textContent=label;
+ row.append(text,control);
+ return row;
+}
+function makeSelect(options,value,callback){
+ const s=document.createElement("select");
+ options.forEach(([v,label])=>{
+  const o=document.createElement("option");
+  o.value=v;o.textContent=label;
+  s.appendChild(o);
+ });
+ s.value=String(value);
+ s.onchange=()=>callback(s.value);
+ return s;
+}
+function settingsPanel(){
+ openPanel("Quick Settings");
+ const root=el("panelcontent");
+ root.innerHTML="";
+ const auto=makeSelect([["true","On"],["false","Off"]],settings.auto,v=>{
+  settings.auto=v==="true";resetRotation();
+ });
+ root.appendChild(settingRow("Automatic city transitions",auto));
+ const interval=makeSelect([[12,"12 seconds"],[20,"20 seconds"],[30,"30 seconds"],[60,"60 seconds"]],settings.interval,v=>{
+  settings.interval=Number(v);resetRotation();
+ });
+ root.appendChild(settingRow("City transition interval",interval));
+ const saver=makeSelect([["true","On"],["false","Off"]],settings.saver,v=>{
+  settings.saver=v==="true";activity();
+ });
+ root.appendChild(settingRow("Cinematic screensaver",saver));
+ const idle=makeSelect([[60,"1 minute"],[120,"2 minutes"],[300,"5 minutes"],[600,"10 minutes"]],settings.idle,v=>{
+  settings.idle=Number(v);activity();
+ });
+ root.appendChild(settingRow("Screensaver after inactivity",idle));
+ const brightness=document.createElement("input");
+ brightness.type="range";brightness.min=45;brightness.max=100;
+ brightness.value=settings.brightness;
+ brightness.oninput=()=>{
+  settings.brightness=Number(brightness.value);
+  el("bg").style.filter="brightness("+(settings.brightness/100)+")";
+ };
+ root.appendChild(settingRow("Background brightness",brightness));
+ const now=document.createElement("button");
+ now.textContent="Start screensaver now";
+ now.style.marginTop="20px";
+ now.style.padding="12px 20px";
+ now.style.borderRadius="12px";
+ now.style.background="#284b70";
+ now.style.border="1px solid white";
+ now.onclick=()=>{closePanel();startScreensaver()};
+ root.appendChild(now);
 }
 
-function closePanels(){
-el("forecastPanel").classList.remove("open");
-el("settingsPanel").classList.remove("open");
+function launch(app){
+ const url=appUrls[app];
+ if(url)window.open(url,"_blank","noopener,noreferrer");
+ else toast("App unavailable");
+ activity();
 }
 
-function openSettings(){
-closePanels();el("settingsPanel").classList.add("open");wake();
+function navigate(section,button){
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("selected"));
+ button.classList.add("selected");
+ activity();
+ if(section==="Weather"){weatherPanel();return}
+ if(section==="Settings"){settingsPanel();return}
+ if(section==="Home"){closePanel();return}
+ if(section==="Music"){launch("spotify");return}
+ if(section==="Movies"||section==="Series"){
+  openPanel(section);
+  el("panelcontent").innerHTML="";
+  const p=document.createElement("p");
+  p.textContent="Choose a streaming service from the glass app dock.";
+  el("panelcontent").appendChild(p);
+  return;
+ }
+ if(section==="Live TV")toast("Choose your live TV service from the dock");
 }
 
-function openForecast(){
-closePanels();
-var c=cities[current];
-el("forecastTitle").textContent=c.name+" — Five-day forecast";
-var cached=weatherCache[c.name];
-if(!cached){
-el("forecast").textContent="Loading forecast...";
-el("forecastPanel").classList.add("open");
-loadWeather().then(function(){
-if(el("forecastPanel").classList.contains("open")&&weatherCache[c.name]){
-drawForecast(c.name);
-}
-});
-}else drawForecast(c.name);
-el("forecastPanel").classList.add("open");
-wake();
-}
-
-function drawForecast(name){
-var cached=weatherCache[name];
-if(!cached)return;
-var d=cached.data.daily;
-el("forecast").innerHTML=d.time.map(function(date,i){
-var label=new Date(date+"T12:00:00Z").toLocaleDateString("en-GB",{
-weekday:"short",timeZone:"UTC"
-});
-return '<div class="day">'+label+
-'<strong>'+Math.round(d.temperature_2m_max[i])+'°</strong>'+
-Math.round(d.temperature_2m_min[i])+'°'+
-'<div style="margin-top:8px">'+
-(conditions[d.weather_code[i]]||"Weather")+'</div></div>';
-}).join("");
+function activity(){
+ lastActivity=Date.now();
+ clearTimeout(saverTimer);
+ if(settings.saver){
+  saverTimer=setTimeout(()=>{
+   if(Date.now()-lastActivity>=settings.idle*1000&&!el("panel").classList.contains("open")){
+    startScreensaver();
+   }
+  },settings.idle*1000);
+ }
 }
 
 function startScreensaver(){
-if(!el("screenOn").checked)return;
-closePanels();
-idle=true;
-document.body.classList.add("idle");
-el("screensaver").classList.add("show");
+ if(!settings.saver)return;
+ el("screensaver").classList.add("show");
+ el("savecity").textContent=cities[current].name;
+ updateClock();
+ clearInterval(saverInterval);
+ saverInterval=setInterval(()=>{
+  selectCity((current+1)%cities.length);
+ },settings.interval*1000);
+}
+function exitScreensaver(){
+ el("screensaver").classList.remove("show");
+ clearInterval(saverInterval);
+ activity();
+ resetRotation();
 }
 
-function wake(){
-idle=false;
-document.body.classList.remove("idle");
-el("screensaver").classList.remove("show");
-clearTimeout(idleTimer);
-if(el("screenOn").checked){
-idleTimer=setTimeout(function(){
-if(!el("forecastPanel").classList.contains("open")&&
-!el("settingsPanel").classList.contains("open")){
-startScreensaver();
-}
-},180000);
-}
-}
-
-document.addEventListener("pointerdown",function(e){
-if(idle){
-wake();
-e.preventDefault();
-}else wake();
-},true);
-
-document.addEventListener("keydown",function(e){
-if(idle){wake();e.preventDefault();return;}
-wake();
-if(e.key==="Escape"||e.key==="Backspace"){
-closePanels();return;
-}
-if(el("forecastPanel").classList.contains("open")||
-el("settingsPanel").classList.contains("open"))return;
-
-var buttons=Array.from(document.querySelectorAll(".cities button,.dock button,nav button"));
-var index=buttons.indexOf(document.activeElement);
-var direction=0;
-if(e.key==="ArrowRight"||e.key==="ArrowDown")direction=1;
-if(e.key==="ArrowLeft"||e.key==="ArrowUp")direction=-1;
-if(direction){
-index=index<0?0:(index+direction+buttons.length)%buttons.length;
-buttons[index].focus();e.preventDefault();
-}
-if(e.key==="Enter"&&document.activeElement.tagName==="BUTTON"){
-document.activeElement.click();
-}
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"){
+  if(el("screensaver").classList.contains("show"))exitScreensaver();
+  else closePanel();
+ }
+ if(e.key==="ArrowRight")selectCity((current+1)%cities.length,true);
+ if(e.key==="ArrowLeft")selectCity((current+cities.length-1)%cities.length,true);
 });
+document.addEventListener("pointerdown",()=>{
+ if(!el("screensaver").classList.contains("show"))activity();
+},{passive:true});
 
-renderApps();
-renderNav();
-render();
-restartRotation();
-setInterval(clock,30000);
-wake();
+selectCity(0);
+clockTimer=setInterval(updateClock,1000);
+resetRotation();
+activity();
 </script>
 </body>
 </html>
